@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 mongoose.set('strictQuery', true);
 
-const {
-    db: { host, port, name },
-} = require('../configs/config.mongodb');
+// const {
+//     db: { host, port, name },
+// } = require('../configs/config.mongodb');
 
 //nd6K6idrswJYN4cd
 // const connectString = `mongodb://${host}:${port}/${name}`

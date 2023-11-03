@@ -1,15 +1,14 @@
-const { NotFoundError } = require('../core/error.response')
-const shopModel = require('../models/shop.model')
+const { NotFoundError } = require('../core/error.response');
+const shopModel = require('../models/shop.model');
 // const { getProductById } = require('../models/repositories/product.repo')
 
 class UserService {
-
     static async createUsers({ user, product, shopId }) {
         const newTransaction = new shopModel({
             transaction_state: 'active',
             transaction_ShopId: shopId,
             transaction_products: [product],
-            transaction_userId: [user]
+            transaction_userId: [user],
         });
 
         try {
@@ -22,7 +21,6 @@ class UserService {
     }
 
     static async deleteUser({ userId, productId }) {
-
         const query = { cart_userId: userId, cart_state: 'active' },
             updateSet = {
                 $pull: {
@@ -30,43 +28,38 @@ class UserService {
                         productId,
                     },
                 },
-            }
+            };
 
-        const deleteCart = await shopModel.updateOne(query, updateSet)
+        const deleteCart = await shopModel.updateOne(query, updateSet);
 
-        return deleteCart
+        return deleteCart;
     }
 
     static async updateUser({ id }) {
-
         const query = { _id: id };
         const updateSet = {
             $set: {
-                status: "active"
-            }
+                status: 'active',
+            },
         };
-        const updateCart = await shopModel.updateOne(query, updateSet)
+        const updateCart = await shopModel.updateOne(query, updateSet);
 
-        return updateCart
+        return updateCart;
     }
 
     static async updateUserUn({ id }) {
-
         const query = { _id: id };
         const updateSet = {
             $set: {
-                status: "inactive"
-            }
+                status: 'inactive',
+            },
         };
-        const updateCart = await shopModel.updateOne(query, updateSet)
+        const updateCart = await shopModel.updateOne(query, updateSet);
 
-        return updateCart
+        return updateCart;
     }
 
-
-
     static async getListUser({ userId }) {
-
         const limit = 10;
         const sort = 'ctime';
         const page = 1;
@@ -79,6 +72,7 @@ class UserService {
         const skip = (page - 1) * limit;
         const sortBy = sort === 'ctime' ? { _id: -1 } : { id: 1 };
 
+        console.log({ userId });
         // Kiểm tra nếu userId là của admin
         // Lọc danh sách người dùng theo yêu cầu của admin
         // Ví dụ: filter.isAdmin = true
@@ -86,10 +80,9 @@ class UserService {
 
         console.log(admin);
 
-        if (admin && admin.roles && admin.roles.includes('admin')) {
+        if (admin && admin.roles && admin.roles.includes('ADMIN')) {
             const userRoles = admin.roles;
             console.log({ userRoles });
-            console.log("admin");
 
             const products = shopModel
                 .find(filter)
@@ -103,16 +96,11 @@ class UserService {
             // Người dùng có vai trò admin
             // Thực hiện các hành động liên quan đến việc lấy danh sách người dùng của admin
         } else {
-            console.log("not admin");
+            console.log('not admin');
 
             // Người dùng không có vai trò admin
             // Xử lý trường hợp khác (nếu cần)
         }
-
-
-
-
-
     }
 }
 
@@ -125,5 +113,4 @@ class UserService {
 //         .lean()
 // }
 
-
-module.exports = UserService
+module.exports = UserService;

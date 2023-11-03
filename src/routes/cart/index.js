@@ -13,9 +13,9 @@ router.post('/', asyncHandler(CartController.addToCart));
 router.post('/update', asyncHandler(CartController.update));
 router.post('/delete', asyncHandler(CartController.delete));
 router.get('/shopId/:shopId', asyncHandler(CartController.listToCartByShop));
-router.get('/getlistCart/:userId', asyncHandler(CartController.listToCart));
+router.post('/getlistCart', asyncHandler(CartController.listToCart));
 router.post(
-    '/updateTransaciton/:userId',
+    '/updateTransaciton',
     asyncHandler(CartController.updateTransaciton),
 );
 

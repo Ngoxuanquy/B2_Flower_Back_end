@@ -9,7 +9,7 @@ mongoose.set('strictQuery', true);
 //nd6K6idrswJYN4cd
 // const connectString = `mongodb://${host}:${port}/${name}`
 const connectString =
-    'mongodb+srv://ngoxuanquy1812:nd6K6idrswJYN4cd@cluster0.xv8sxci.mongodb.net/';
+    'mongodb+srv://girllinh4:hrQdehoMFZc1abV8@cluster0.9gulfoc.mongodb.net/?retryWrites=true&w=majority';
 
 console.log('connectString::', connectString);
 

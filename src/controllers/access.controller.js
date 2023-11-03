@@ -1,5 +1,5 @@
-const { CREATED, SuccessResponse } = require('../core/success.response')
-const AccessService = require('../services/access.service')
+const { CREATED, SuccessResponse } = require('../core/success.response');
+const AccessService = require('../services/access.service');
 
 class AccessController {
     // V1
@@ -21,39 +21,46 @@ class AccessController {
                 user: req.user,
                 keyStore: req.keyStore,
             }),
-        }).send(res)
-    }
+        }).send(res);
+    };
 
     logout = async (req, res, next) => {
         new SuccessResponse({
             message: 'Logout success',
             metadata: await AccessService.logout(req.keyStore),
-        }).send(res)
-    }
+        }).send(res);
+    };
 
     login = async (req, res, next) => {
         new SuccessResponse({
             message: 'Success',
             metadata: await AccessService.login(req.body),
-        }).send(res)
-    }
+        }).send(res);
+    };
+
+    loginFB_GG = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'Success',
+            metadata: await AccessService.loginFB_GG(req.body),
+        }).send(res);
+    };
 
     signUp = async (req, res, next) => {
-        console.log(req.body)
+        console.log(req.body);
         new CREATED({
             message: 'Register OK',
             metadata: await AccessService.signUp(req.body),
-        }).send(res)
+        }).send(res);
 
         // return res.status(201).json(await AccessService.signUp(req.body))
-    }
+    };
     updateVerify = async (req, res, next) => {
-        console.log(req.params)
+        console.log(req.params);
         new SuccessResponse({
             message: 'getList Cart success',
             metadata: await AccessService.updateVerify(req.params),
-        }).send(res)
-    }
+        }).send(res);
+    };
 }
 
-module.exports = new AccessController()
+module.exports = new AccessController();

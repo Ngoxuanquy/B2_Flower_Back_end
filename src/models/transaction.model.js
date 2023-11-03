@@ -1,7 +1,7 @@
-const { model, Schema } = require('mongoose')
+const { model, Schema } = require('mongoose');
 
-const DOCUMENT_NAME = 'Transactions'
-const COLLECTION_NAME = 'transactions'
+const DOCUMENT_NAME = 'Transactions';
+const COLLECTION_NAME = 'transactions';
 
 const TransactionSchema = new Schema(
     {
@@ -13,11 +13,9 @@ const TransactionSchema = new Schema(
         },
         notifications: {
             type: String,
-
         },
         userId: {
             type: String,
-
         },
         transaction_products: {
             type: Array,
@@ -31,15 +29,13 @@ const TransactionSchema = new Schema(
         },
         status: {
             type: String,
-            default: "Đang nhận đơn",
+            default: 'Đang nhận đơn',
         },
         transaction_userId: {
             type: Array,
             required: true,
             default: [],
-
         },
-
     },
     {
         collection: COLLECTION_NAME,
@@ -47,9 +43,9 @@ const TransactionSchema = new Schema(
             createdAt: 'createdOn',
             updatedAt: 'modifieOn',
         },
-    }
-)
+    },
+);
 
 module.exports = {
     transaction: model(DOCUMENT_NAME, TransactionSchema),
-}
+};

@@ -3,6 +3,8 @@ const CartService = require('../services/cart.service');
 
 class CartController {
     static async addToCart(req, res, next) {
+        console.log(req.body);
+
         new SuccessResponse({
             message: 'Create new Cart success',
             metadata: await CartService.addToCart(req.body),
@@ -12,7 +14,7 @@ class CartController {
     static async updateTransaciton(req, res, next) {
         new SuccessResponse({
             message: 'Create new Cart success',
-            metadata: await CartService.updateTransaciton(req.params),
+            metadata: await CartService.updateTransaciton(req.body),
         }).send(res);
     }
 
@@ -35,7 +37,7 @@ class CartController {
     static async listToCart(req, res, next) {
         new SuccessResponse({
             message: 'getList Cart success',
-            metadata: await CartService.getListUserCart(req.params),
+            metadata: await CartService.getListUserCart(req.body),
         }).send(res);
     }
 

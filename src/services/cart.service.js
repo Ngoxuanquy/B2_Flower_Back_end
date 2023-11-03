@@ -28,12 +28,12 @@ class CartService {
         // console.log({ userId })
         console.log({ product });
         try {
-            const { productId, quantity } = product;
+            const { _id, quantity } = product;
 
             const query = {
                     cart_userId: userId,
                     cart_state: 'active',
-                    'cart_products._id': productId,
+                    'cart_products._id': _id,
                 },
                 updateSet = {
                     $inc: {
@@ -159,14 +159,41 @@ class CartService {
             .lean();
     }
 
-    static async updateTransaciton({ userId }) {
+    static async updateTransaciton({ userId, newCartData }) {
         try {
-            // Sử dụng phương thức findOneAndUpdate để tìm và cập nhật tài liệu dựa trên userId
-            const updatedCart = await cart.deleteOne(
-                { userId: userId }, // Điều kiện để tìm tài liệu
-            );
+            // Find the old cart data based on userId
+            const oldCart = await cart.findOne({ userId: userId });
 
-            return updatedCart;
+            if (!oldCart) {
+                throw new Error('Cart not found.');
+            }
+
+            // Convert old and new data to JSON strings for comparison
+            const oldCartJSON = JSON.stringify(oldCart.cart_products);
+            const newCartDataJSON = JSON.stringify(newCartData);
+
+            if (oldCartJSON === newCartDataJSON) {
+                // If the data is equal, delete the cart
+                await cart.deleteOne({ userId: userId });
+                return null; // Indicate that the cart has been deleted
+            } else {
+                // Compare old and new data to find new items in newCartData
+                for (const newItem of newCartData) {
+                    oldCart.cart_products.forEach((product, index) => {
+                        if (newItem._id === product._id) {
+                            oldCart.cart_products.splice(index, 1); // Loại bỏ phần tử tại vị trí index
+                        }
+                    });
+                }
+                // Update the cart with the filtered cart_products
+                const updatedCart = await cart.findOneAndUpdate(
+                    { userId: userId },
+                    { $set: { cart_products: oldCart.cart_products } },
+                    { new: true },
+                );
+
+                return updatedCart;
+            }
         } catch (error) {
             console.error(error);
             throw new Error('Failed to update transaction.');

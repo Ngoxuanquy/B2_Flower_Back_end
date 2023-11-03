@@ -1,5 +1,5 @@
-const { NotFoundError } = require('../core/error.response')
-const { transaction } = require('../models/transaction.model')
+const { NotFoundError } = require('../core/error.response');
+const { transaction } = require('../models/transaction.model');
 // const { getProductById } = require('../models/repositories/product.repo')
 
 class TransactionService {
@@ -21,9 +21,13 @@ class TransactionService {
     //     return await transaction.create(query, updateOrInsert, options)
     // }
 
-    static async createUserTransaction({ user, product, shopId, notifications }) {
-
-        console.log({ notifications })
+    static async createUserTransaction({
+        user,
+        product,
+        shopId,
+        notifications,
+    }) {
+        console.log({ notifications });
 
         const newTransaction = new transaction({
             transaction_state: 'active',
@@ -31,7 +35,7 @@ class TransactionService {
             // transaction_ShopId: shopId,
             transaction_products: product,
             transaction_userId: [user],
-            notifications: notifications
+            notifications: notifications || 'null',
         });
 
         try {
@@ -43,11 +47,9 @@ class TransactionService {
         }
     }
 
-
     static async deleteUserTransaction({ userId, productId }) {
-
-        console.log({ userId })
-        console.log({ productId })
+        console.log({ userId });
+        console.log({ productId });
 
         const query = { cart_userId: userId, cart_state: 'active' },
             updateSet = {
@@ -56,32 +58,32 @@ class TransactionService {
                         productId,
                     },
                 },
-            }
+            };
 
-        const deleteCart = await cart.updateOne(query, updateSet)
+        const deleteCart = await cart.updateOne(query, updateSet);
 
-        return deleteCart
+        return deleteCart;
     }
 
     static async updateStatus({ userId, product }) {
-
-        console.log(JSON.stringify(product))
-        console.log({ userId })
+        console.log(JSON.stringify(product));
+        console.log({ userId });
 
         const query = {
-            userId: userId,
-            transaction_products: product
-
-        },
+                userId: userId,
+                transaction_products: product,
+            },
             updateSet = {
                 $set: {
-                    status: "Đã gửi hàng"
+                    status: 'Đã gửi hàng',
                 },
-            }
+            };
 
         try {
             const updateResult = await transaction.updateOne(query, updateSet);
-            console.log(`${updateResult.modifiedCount} bản ghi đã được cập nhật.`);
+            console.log(
+                `${updateResult.modifiedCount} bản ghi đã được cập nhật.`,
+            );
             return updateResult;
         } catch (err) {
             console.error(err);
@@ -107,11 +109,12 @@ class TransactionService {
 
     static async getFull() {
         try {
-
             // Use the 'findMany' method to find multiple documents where 'userId' matches
-            const transactions = await transaction.find({
-                status: "Đang nhận đơn"
-            }).lean();
+            const transactions = await transaction
+                .find({
+                    status: 'Đang nhận đơn',
+                })
+                .lean();
 
             // Return an array of matching documents
             return transactions;
@@ -124,12 +127,13 @@ class TransactionService {
 
     static async getFullUseId({ userId }) {
         try {
-
             // Use the 'findMany' method to find multiple documents where 'userId' matches
-            const transactions = await transaction.find({
-                status: "Đang nhận đơn",
-                userId: userId
-            }).lean();
+            const transactions = await transaction
+                .find({
+                    status: 'Đang nhận đơn',
+                    userId: userId,
+                })
+                .lean();
 
             // Return an array of matching documents
             return transactions;
@@ -142,11 +146,12 @@ class TransactionService {
 
     static async getFullOrder_done() {
         try {
-
             // Use the 'findMany' method to find multiple documents where 'userId' matches
-            const transactions = await transaction.find({
-                status: "Đã gửi hàng"
-            }).lean();
+            const transactions = await transaction
+                .find({
+                    status: 'Đã gửi hàng',
+                })
+                .lean();
 
             // Return an array of matching documents
             return transactions;
@@ -159,12 +164,13 @@ class TransactionService {
 
     static async getFullOrder_doneUseId({ userId }) {
         try {
-
             // Use the 'findMany' method to find multiple documents where 'userId' matches
-            const transactions = await transaction.find({
-                status: "Đã gửi hàng",
-                userId: userId
-            }).lean();
+            const transactions = await transaction
+                .find({
+                    status: 'Đã gửi hàng',
+                    userId: userId,
+                })
+                .lean();
 
             // Return an array of matching documents
             return transactions;
@@ -174,7 +180,6 @@ class TransactionService {
             throw error;
         }
     }
-
 }
 
-module.exports = TransactionService
+module.exports = TransactionService;

@@ -1,8 +1,8 @@
-const { Schema, model } = require('mongoose')
-const slugify = require('slugify')
+const { Schema, model } = require('mongoose');
+const slugify = require('slugify');
 
-const DOCUMENT_NAME = 'Product'
-const COLLECTION_NAME = 'Products'
+const DOCUMENT_NAME = 'Product';
+const COLLECTION_NAME = 'Products';
 
 var productSchema = new Schema(
     {
@@ -26,8 +26,7 @@ var productSchema = new Schema(
         },
         product_type: {
             type: String,
-            required: true,
-            // enum: ['Electronics', 'Clothing', 'Furniture'],
+            // required: true,
         },
         product_shop: {
             type: Schema.Types.ObjectId,
@@ -46,24 +45,32 @@ var productSchema = new Schema(
         },
         product_variations: { type: Array, default: [] },
         isDraft: { type: Boolean, default: true, index: true, select: false },
-        isPublished: { type: Boolean, default: false, index: true, select: true },
+        isPublished: {
+            type: Boolean,
+            default: false,
+            index: true,
+            select: true,
+        },
     },
     {
         collection: COLLECTION_NAME,
         timestamps: true,
-    }
-)
+    },
+);
 
 // create index for search
 
-productSchema.index({ product_name: 'text', product_description: 'text' })
+productSchema.index({ product_name: 'text', product_description: 'text' });
 
 // Document middlewaer
 
 productSchema.pre('save', function (next) {
-    this.product_slug = slugify(this.product_name, { lower: true, locale: 'vi' })
-    next()
-})
+    this.product_slug = slugify(this.product_name, {
+        lower: true,
+        locale: 'vi',
+    });
+    next();
+});
 
 const clothingSchema = new Schema(
     {
@@ -78,8 +85,8 @@ const clothingSchema = new Schema(
     {
         collection: 'clothes',
         timestamps: true,
-    }
-)
+    },
+);
 
 const electronicSchema = new Schema(
     {
@@ -94,8 +101,8 @@ const electronicSchema = new Schema(
     {
         collection: 'electronics',
         timestamps: true,
-    }
-)
+    },
+);
 
 const furnitureSchema = new Schema(
     {
@@ -110,12 +117,12 @@ const furnitureSchema = new Schema(
     {
         collection: 'furnitures',
         timestamps: true,
-    }
-)
+    },
+);
 
 module.exports = {
     product: model(DOCUMENT_NAME, productSchema),
     clothing: model('Clothing', clothingSchema),
     electronic: model('Electronics', electronicSchema),
     furniture: model('Furnitures', furnitureSchema),
-}
+};

@@ -2,18 +2,29 @@
 
 POST {{url_dev}}/shop/signup
 Content-Type: application/json 
-x-api-key: f84252040ba6025b2f4331140dd4e7f05387b18c92413b3c3633ecafaa84abccff87d11c14f6c125fda106033bd0458f2dc2b62532e07aaad3538050d0b983c3
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
 
 {
-    "email": "12132a1",
+    "email": "1",
     "password": "1"
 }
 
 ###
 
+POST {{url_dev}}/shop/loginFB_GG
+Content-Type: application/json 
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
+
+{
+     "name": "quy",
+    "email": "121",
+    "password": "1"
+}
+###
+
 POST {{url_dev}}/shop/login
 Content-Type: application/json
-x-api-key: f84252040ba6025b2f4331140dd4e7f05387b18c92413b3c3633ecafaa84abccff87d11c14f6c125fda106033bd0458f2dc2b62532e07aaad3538050d0b983c3
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
 
 {
     "email": "121",
@@ -33,26 +44,57 @@ x-api-key: 025ce9a805c109871ed8664bea8a8e5403f162daf9d7bfd220b4aee66839933504839
 x-client-id: 645f78f0ff400061f37e430d
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDVmNzhmMGZmNDAwMDYxZjM3ZTQzMGQiLCJlbWFpbCI6IjEyMTIiLCJpYXQiOjE2ODUwMjUzNTUsImV4cCI6MTY4NTE5ODE1NX0.T6mj2OTNpaKHNjFJ70n_2mE_bdntDlg7IIGbtJV1x5s
 
-###
-Get {{url_dev}}/users/userId/647e985dfc08161cc7e7f7da
-Content-Type: application/json
-x-api-key: 30929e75539a12a71ea783896b3b99f6d93e78ab41a820ae7e5a3477c520b1fbc6205681dd9f3c2f5950177c233ce246d1df8579f2ba091a303f19cb66c99282
-x-client-id: 647e911bdc92e18f3fcc4c5b
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDdlOTExYmRjOTJlMThmM2ZjYzRjNWIiLCJlbWFpbCI6IjEiLCJpYXQiOjE2ODYwMTgyNzUsImV4cCI6MTY4NjE5MTA3NX0.g52r9TkcTelv5LWZRe7LJmSN9VGRm5qtMt9ljjQFul8
 
 ###
-post {{url_dev}}/users/update/64799ce7f7eea24100662fa3
+post {{url_dev}}/users/userId/653d44f82c8e9a8f5bc2c1fa
 Content-Type: application/json
-x-api-key: 30929e75539a12a71ea783896b3b99f6d93e78ab41a820ae7e5a3477c520b1fbc6205681dd9f3c2f5950177c233ce246d1df8579f2ba091a303f19cb66c99282
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
+x-client-id: 653d44f82c8e9a8f5bc2c1fa
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTNkNDRmODJjOGU5YThmNWJjMmMxZmEiLCJlbWFpbCI6IjEiLCJpYXQiOjE2OTg4MjQ0MzIsImV4cCI6MTY5ODk5NzIzMn0.QYHdO-LiEblendK9H3ziMG_wDBFDoySZkZzuJuLUqxw
+
+
+###
+POST {{url_dev}}/product/delete/646f52c65caeac0dd7587af2
+Content-Type: application/json
+x-api-key: 025ce9a805c109871ed8664bea8a8e5403f162daf9d7bfd220b4aee6683993350483959b54538db3dc220fa426f334c9e740c66e068cc9ab03318ab4426f606b
+x-client-id: 647e911bdc92e18f3fcc4c5b
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDdlOTExYmRjOTJlMThmM2ZjYzRjNWIiLCJlbWFpbCI6IjEiLCJpYXQiOjE2OTgyNDU1NzAsImV4cCI6MTY5ODQxODM3MH0.02i5Uz_Q4udlzWLDmM42o--2ZZJNQx1Z1p2k_zbBqFc
+
+
+###
+Get {{url_dev}}/users/userId/64799ce7f7eea24100662fa3
+Content-Type: application/json
+x-api-key: aaba80788a0f787998f74d60c1077e2b54a413a625cac99e6b35a328b09f092ee8861b543ae43d0e460c55019b0231e419625b1955015797469cb4b7bbdd8c06
+x-client-id: 64799ce7f7eea24100662fa3
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDc5OWNlN2Y3ZWVhMjQxMDA2NjJmYTMiLCJlbWFpbCI6IjEyMSIsImlhdCI6MTY5NzQ1Njg5MSwiZXhwIjoxNjk3NjI5NjkxfQ.dSFNJoAqAiqdPQ9Ytf_G0y-V3pywvm0LEveJLAGLuPw
+
+###
+Get {{url_dev}}/users/cart?userId=64799ce7f7eea24100662fa3
+Content-Type: application/json
+x-api-key: aaba80788a0f787998f74d60c1077e2b54a413a625cac99e6b35a328b09f092ee8861b543ae43d0e460c55019b0231e419625b1955015797469cb4b7bbdd8c06
+x-client-id: 64799ce7f7eea24100662fa3
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDc5OWNlN2Y3ZWVhMjQxMDA2NjJmYTMiLCJlbWFpbCI6IjEyMSIsImlhdCI6MTY5NzQ1Njg5MSwiZXhwIjoxNjk3NjI5NjkxfQ.dSFNJoAqAiqdPQ9Ytf_G0y-V3pywvm0LEveJLAGLuPw
+
+
+###
+post {{url_dev}}/vnpay/create_payment_url
+Content-Type: application/json
+x-api-key: aaba80788a0f787998f74d60c1077e2b54a413a625cac99e6b35a328b09f092ee8861b543ae43d0e460c55019b0231e419625b1955015797469cb4b7bbdd8c06
 x-client-id: 647e911bdc92e18f3fcc4c5b
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDdlOTExYmRjOTJlMThmM2ZjYzRjNWIiLCJlbWFpbCI6IjEiLCJpYXQiOjE2ODYwNDAxOTgsImV4cCI6MTY4NjIxMjk5OH0.-pK735fCN67RTpHJMuV2CzUJ-UMZ_sZg5TlrIcEpG_o
+
+{
+        "amount": "100",
+        "language": "vn",
+        "bankCode": ""
+}
 
 ###
 POST {{url_dev}}/product/getAll
 Content-Type: application/json
-x-api-key: f84252040ba6025b2f4331140dd4e7f05387b18c92413b3c3633ecafaa84abccff87d11c14f6c125fda106033bd0458f2dc2b62532e07aaad3538050d0b983c3
-x-client-id: 64eff56c094acda5b55a41fc
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGVmZjU2YzA5NGFjZGE1YjU1YTQxZmMiLCJlbWFpbCI6IjEyMTIiLCJpYXQiOjE2OTM1NTYzMjcsImV4cCI6MTY5MzcyOTEyN30.SAy-YBrobm8nt1o0181gsy5b23VgoB_fC8ygCJAPhb0
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
+x-client-id: 653d44f82c8e9a8f5bc2c1fa
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTNkNDRmODJjOGU5YThmNWJjMmMxZmEiLCJlbWFpbCI6IjEiLCJpYXQiOjE2OTg4MjQ0MzIsImV4cCI6MTY5ODk5NzIzMn0.QYHdO-LiEblendK9H3ziMG_wDBFDoySZkZzuJuLUqxw
 
 ###
 get {{url_dev}}/product/search/a
@@ -65,16 +107,16 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGVmZjU2YzA5
 ###
 POST {{url_dev}}/product
 Content-Type: application/json
-x-api-key: f84252040ba6025b2f4331140dd4e7f05387b18c92413b3c3633ecafaa84abccff87d11c14f6c125fda106033bd0458f2dc2b62532e07aaad3538050d0b983c3
-x-client-id: 64eff56c094acda5b55a41fc
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGVmZjU2YzA5NGFjZGE1YjU1YTQxZmMiLCJlbWFpbCI6IjEyMTIiLCJpYXQiOjE2OTM1NTYzMjcsImV4cCI6MTY5MzcyOTEyN30.SAy-YBrobm8nt1o0181gsy5b23VgoB_fC8ygCJAPhb0
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
+x-client-id: 653dc0d5a7ee6d16b89e9781
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTNkYzBkNWE3ZWU2ZDE2Yjg5ZTk3ODEiLCJlbWFpbCI6IjEzNDUiLCJpYXQiOjE2OTg1OTE3NjgsImV4cCI6MTY5ODc2NDU2OH0.mCowRVgNZei7BNA9QTnZY5or3fla_O0X186-n2jh2mk
 
 {
     "product_name": "a3",
     "product_thumb": "https://scontent.fhan14-2.fna.fbcdn.net/v/t39.30808-6/328709559_1481611285700057_6150010650656469516_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=730e14&_nc_ohc=fmx6JHWykFEAX9Se7u7&_nc_ht=scontent.fhan14-2.fna&oh=00_AfCqbWGZIlu7d3XAuwFNBUBWxf0vzb52J0ccINks73Wd1g&oe=64739334", 
     "product_description": "aa",
     "product_price": 300,
-    "product_type": "Electronics",
+    "product_type": "abc",
     "product_quantity": 5,
     "product_attributes": {
         "manufacturer": "quy",
@@ -138,9 +180,9 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGYwMTE2MzMy
 ###
 post {{url_dev}}/cart
 Content-Type: application/json
-x-api-key: f84252040ba6025b2f4331140dd4e7f05387b18c92413b3c3633ecafaa84abccff87d11c14f6c125fda106033bd0458f2dc2b62532e07aaad3538050d0b983c3
-x-client-id: 64f14697f15478225387a2c2
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGYxNDY5N2YxNTQ3ODIyNTM4N2EyYzIiLCJlbWFpbCI6IjEiLCJpYXQiOjE2OTM3MzEyMzUsImV4cCI6MTY5MzkwNDAzNX0._A-bgO-A6BJ0J3aai5RoPFni47Qg8zrSjDL7-9uEO1Y
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
+x-client-id: 6543bd8ae5184627a486ea7f
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTQzYmQ4YWU1MTg0NjI3YTQ4NmVhN2YiLCJlbWFpbCI6IjEyMSIsImlhdCI6MTY5ODkzODkxOCwiZXhwIjoxNjk5MTExNzE4fQ.TTlhEz7Swz_86I2Wn7zR4jFONXG9Vsf2_rRO_cmB6YM
 
 {
        "userId": "645f77c72b38802e12f7b580",
@@ -203,9 +245,9 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDc5YTFjNWY3
 ###
 post {{url_dev}}/cart/update
 Content-Type: application/json
-x-api-key: 30929e75539a12a71ea783896b3b99f6d93e78ab41a820ae7e5a3477c520b1fbc6205681dd9f3c2f5950177c233ce246d1df8579f2ba091a303f19cb66c99282
+x-api-key: aaba80788a0f787998f74d60c1077e2b54a413a625cac99e6b35a328b09f092ee8861b543ae43d0e460c55019b0231e419625b1955015797469cb4b7bbdd8c06
 x-client-id: 64799ce7f7eea24100662fa3
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDc5OWNlN2Y3ZWVhMjQxMDA2NjJmYTMiLCJlbWFpbCI6IjEyMSIsImlhdCI6MTY4Nzg3NTYzNCwiZXhwIjoxNjg4MDQ4NDM0fQ.tFZdU7I_19csom3R87n1Jss87jLVSIMSA3Jj0bBlVG8
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDc5OWNlN2Y3ZWVhMjQxMDA2NjJmYTMiLCJlbWFpbCI6IjEyMSIsImlhdCI6MTY5NzQ1NzczNiwiZXhwIjoxNjk3NjMwNTM2fQ.adeQwe_gJ_s1kdbOLk5xUoTlIkwLEWj-glSIloKvGeg
 
 {
        "userId": "6479a1c5f7eea24100662fa8",

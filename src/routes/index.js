@@ -5,9 +5,12 @@ const router = express.Router();
 
 // check apikey
 
+router.use('/v1/api/chat', require('./chat'));
+router.use('/v1/api/vnpay', require('./VnPay'));
+
 router.use(apiKey);
 
-// check permission
+// // check permission
 
 router.use(permission('0000'));
 
@@ -18,6 +21,5 @@ router.use('/v1/api/cart', require('./cart'));
 router.use('/v1/api/transaction', require('./transaction'));
 router.use('/v1/api/contact', require('./contacts'));
 router.use('/v1/api/users', require('./users'));
-router.use('/v1/api/vnpay', require('./VnPay'));
 
 module.exports = router;

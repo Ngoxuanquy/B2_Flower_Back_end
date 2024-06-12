@@ -163,6 +163,7 @@ class TransactionService {
     }
 
     static async getFullOrder_doneUseId({ userId }) {
+        console.log(userId);
         try {
             // Use the 'findMany' method to find multiple documents where 'userId' matches
             const transactions = await transaction

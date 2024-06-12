@@ -1,30 +1,50 @@
 /**
  * Created by CTT VNPAY
  */
+const express = require('express');
+const Payos = require('@payos/node');
 
-let express = require('express');
+const payos = new Payos(
+    'a0c7a8fb-00dc-426c-ba85-41179a28b1df',
+    '5f405556-7b3b-4359-a5e9-cc25e4518e99',
+    '459703ad94886b85414a4fa4a99f8d77cf8080b4f6d0133c02e6e8d764b61aa7',
+);
+
+const app = express();
+app.use(express.static('public'));
+app.use(express.json());
 let router = express.Router();
 let $ = require('jquery');
 const request = require('request');
 const moment = require('moment');
 
-router.get('/', function (req, res, next) {
-    res.render('orderlist', { title: 'Danh sách đơn hàng' });
+router.post('/receive-hook', async (req, res) => {
+    console.log(req.body);
+    res.json();
 });
 
-router.get('/create_payment_url', function (req, res, next) {
-    res.render('order', { title: 'Tạo mới đơn hàng', amount: 10000 });
+router.post('/create-payment-link', async (req, res) => {
+    console.log(req.body);
+    const MaDonHang = Math.floor(100000 + Math.random() * 900000);
+    const order = {
+        amount: req.body.amount,
+        description: '2B-flower',
+        orderCode: MaDonHang,
+        item: req.body.product,
+        returnUrl: `${Your_Domain}/success.html`,
+        cancelUrl: `http://localhost:3000/cart`,
+    };
+
+    try {
+        const paymentLink = await payos.createPaymentLink(order);
+        res.json(paymentLink.checkoutUrl);
+    } catch (error) {
+        console.error('Error creating payment link:', error.message);
+        res.status(500).send('Internal server error');
+    }
 });
 
-router.get('/querydr', function (req, res, next) {
-    let desc = 'truy van ket qua thanh toan';
-    res.render('querydr', { title: 'Truy vấn kết quả thanh toán' });
-});
-
-router.get('/refund', function (req, res, next) {
-    let desc = 'Hoan tien GD thanh toan';
-    res.render('refund', { title: 'Hoàn tiền giao dịch thanh toán' });
-});
+//https://6515-1-54-8-247.ngrok-free.app
 
 router.post('/create_payment_url', function (req, res, next) {
     console.log(req.body);

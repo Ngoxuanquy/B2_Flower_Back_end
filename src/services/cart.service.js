@@ -95,9 +95,7 @@ class CartService {
 
     static async addToCartV2({ userId, shop_order_ids }) {
         const { productId, quantity, old_quantity } = shop_order_ids[0];
-        console.log({ productId });
-        console.log({ quantity });
-        console.log(shop_order_ids);
+
 
         const foundProduct = await getProductById(productId);
         console.log(foundProduct);

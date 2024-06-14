@@ -1,12 +1,47 @@
  @url_dev = http://localhost:3056/v1/api
 
+
+GET http://localhost:3056
+Content-Type: application/json 
+
+###
+###
+POST {{url_dev}}/vnpay/receive-hook
+Content-Type: application/json 
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
+
+
+###
 POST {{url_dev}}/shop/signup
 Content-Type: application/json 
 x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
 
 {
-    "email": "1",
+    "email": "121",
     "password": "1"
+}
+
+
+###
+get {{url_dev}}/transaction/getFullOrder_doneUseId/6543bd8ae5184627a486ea7f
+
+###
+post {{url_dev}}/transaction/getFullUseId/6543bd8ae5184627a486ea7f
+Content-Type: application/json
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
+x-client-id: 6543bd8ae5184627a486ea7f
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTQzYmQ4YWU1MTg0NjI3YTQ4NmVhN2YiLCJlbWFpbCI6IjEyMSIsImlhdCI6MTcxNjgwMjE3NCwiZXhwIjoxNzE2OTc0OTc0fQ.9TbPiL3rIEFXQrEhWUZfp9RJwSM5M8Bp88RqB7N0uoM
+
+
+###
+post {{url_dev}}/cart/getlistCart
+Content-Type: application/json
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
+x-client-id: 6543bd8ae5184627a486ea7f
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTQzYmQ4YWU1MTg0NjI3YTQ4NmVhN2YiLCJlbWFpbCI6IjEyMSIsImlhdCI6MTcxNjgwMTczNiwiZXhwIjoxNzE2OTc0NTM2fQ.E9fSGObKysqbtWrVhGcVI7tTR6ytinNz5mO5T12Yfjw
+
+{
+    "userId": "6543bd8ae5184627a486ea7f"
 }
 
 ###
@@ -29,6 +64,17 @@ x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831
 {
     "email": "121",
     "password": "1"
+}
+
+###
+get {{url_dev}}/cart/getlist
+Content-Type: application/json
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
+x-client-id: 6543bd8ae5184627a486ea7f
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTQzYmQ4YWU1MTg0NjI3YTQ4NmVhN2YiLCJlbWFpbCI6IjEyMSIsImlhdCI6MTcxNjUzODYxOCwiZXhwIjoxNzE2NzExNDE4fQ.ulvc4Zx7vxBAXElVrHWgdvbdtS2tcvX6wSIDKuJOBu8
+
+{
+    "userId": "6543bd8ae5184627a486ea7f"
 }
 
 ###

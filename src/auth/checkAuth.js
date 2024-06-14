@@ -7,19 +7,12 @@ const HEADER = {
 
 const apiKey = async (req, res, next) => {
   try {
-    // Kiểm tra xem request đến từ địa chỉ nào
-    const requestUrl = req.protocol + "://" + req.get("host");
-
-    console.log({ requestUrl });
-
-    // Nếu địa chỉ là http://localhost:3056/, bỏ qua việc kiểm tra API key
-    if (requestUrl === "http://localhost:3056") {
-      console.log("abcxbcbcb");
-      return next();
-    }
-
-    // Kiểm tra API key nếu request đến từ các địa chỉ khác
-    const key = req.headers[HEADER.API_KEY]?.toString();
+    const test = req.rawHeaders[13];
+    console.log({
+      req: req.rawHeaders[13],
+    });
+    const key = req.headers[HEADER.API_KEY]?.toString() != undefined ? req.headers[HEADER.API_KEY]?.toString() : req.rawHeaders[13];
+    console.log(key);
     if (!key) {
       return res.status(403).json({
         msg: "Forbidden Error",
@@ -36,27 +29,11 @@ const apiKey = async (req, res, next) => {
     req.objKey = objKey;
 
     return next();
-  } catch (error) {
-    // Xử lý lỗi nếu có
-    console.error(error);
-    return res.status(500).json({
-      msg: "Internal Server Error",
-    });
-  }
+  } catch (error) {}
 };
 
 const permission = (permission) => {
   return (req, res, next) => {
-    const requestUrl = req.protocol + "://" + req.get("host");
-
-    console.log({ requestUrl });
-
-    // Nếu địa chỉ là http://localhost:3056/, bỏ qua việc kiểm tra API key
-    if (requestUrl === "http://localhost:3056") {
-      console.log("abcxbcbcb");
-      return next();
-    }
-
     if (!req.objKey.permissions) {
       return res.status(403).json({
         msg: "Permission dinied",

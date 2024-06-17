@@ -22,8 +22,14 @@ const moment = require("moment");
 router.post("/receive-hook", async (req, res) => {
   console.log(req.body);
 
-  const paymentLinkInfo = await payos.getPaymentLinkInfomation(req.body.data.orderCode);
-  console.log(paymentLinkInfo);
+  try {
+    const paymentLinkInfo = await payos.getPaymentLinkInformation(req.body.data?.orderCode);
+    console.log(paymentLinkInfo);
+    res.status(200).send(paymentLinkInfo); // Respond with the payment link information
+  } catch (error) {
+    console.error("Error getting payment link information:", error.message);
+    res.status(500).send("Internal server error");
+  }
 });
 
 router.post("/create-payment-link", async (req, res) => {

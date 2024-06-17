@@ -3,6 +3,7 @@
  */
 const express = require("express");
 const Payos = require("@payos/node");
+const { cart } = require("../../models/cart.model");
 
 const payos = new Payos(
   "a0c7a8fb-00dc-426c-ba85-41179a28b1df",
@@ -20,7 +21,9 @@ const moment = require("moment");
 
 router.post("/receive-hook", async (req, res) => {
   console.log(req.body);
-  res.json();
+
+  const paymentLinkInfo = await payos.getPaymentLinkInfomation(req.body.data.orderCode);
+  console.log(paymentLinkInfo);
 });
 
 router.post("/create-payment-link", async (req, res) => {
@@ -30,7 +33,7 @@ router.post("/create-payment-link", async (req, res) => {
     amount: req.body.amount,
     description: "2B-flower",
     orderCode: MaDonHang,
-    item: req.body.product,
+    items: req.body.product,
     returnUrl: `http://localhost:3000/information`,
     cancelUrl: `http://localhost:3000/cart`,
   };

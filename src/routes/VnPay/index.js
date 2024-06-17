@@ -4,7 +4,7 @@
 const express = require("express");
 const Payos = require("@payos/node");
 const { cart } = require("../../models/cart.model");
-
+const session = require("express-session");
 const payos = new Payos(
   "a0c7a8fb-00dc-426c-ba85-41179a28b1df",
   "5f405556-7b3b-4359-a5e9-cc25e4518e99",
@@ -19,17 +19,20 @@ let $ = require("jquery");
 const request = require("request");
 const moment = require("moment");
 
+app.use(
+  session({
+    secret: "products",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Note: Set to true if using HTTPS
+  })
+);
+
 router.post("/receive-hook", async (req, res) => {
   console.log(req.body);
 
-  try {
-    const paymentLinkInfo = await payos.getPaymentLinkInformation(req.body.data?.orderCode);
-    console.log(paymentLinkInfo);
-    res.status(200).send(paymentLinkInfo); // Respond with the payment link information
-  } catch (error) {
-    console.error("Error getting payment link information:", error.message);
-    res.status(500).send("Internal server error");
-  }
+  const products = req.session.products;
+  console.log("Session Products:", products);
 });
 
 router.post("/create-payment-link", async (req, res) => {
@@ -39,6 +42,8 @@ router.post("/create-payment-link", async (req, res) => {
     quantity: product.quantity,
     price: product.product_price,
   }));
+
+  req.session.products = req.body.product;
 
   console.log(convertedProducts);
 

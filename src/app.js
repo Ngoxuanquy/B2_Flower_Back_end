@@ -6,7 +6,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const http = require("http");
-
+const session = require("express-session");
 const morgan = require("morgan");
 const { checkOverload } = require("./helpers/check.connect");
 const chatController = require("./controllers/chatController");
@@ -19,6 +19,15 @@ const io = socketIo(server);
 // init middlewares
 app.use(cookieParser());
 app.use(express.json());
+
+app.use(
+  session({
+    secret: "products", // replace with your secret key
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // set to true if using HTTPS
+  })
+);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(

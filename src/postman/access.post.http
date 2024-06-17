@@ -6,7 +6,7 @@ Content-Type: application/json
 
 ###
 ###
-POST https://b2-flower-back-end.onrender.com/vnpay/receive-hook
+POST https://b2-flower-back-end.onrender.com/v1/api/vnpay/receive-hook
 Content-Type: application/json 
 x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
 

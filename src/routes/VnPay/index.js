@@ -34,12 +34,20 @@ router.post("/receive-hook", async (req, res) => {
 
 router.post("/create-payment-link", async (req, res) => {
   console.log(req.body);
+  const convertedProducts = req.body.product?.map((product) => ({
+    name: product.product_name,
+    quantity: product.quantity,
+    price: product.product_price,
+  }));
+
+  console.log(convertedProducts);
+
   const MaDonHang = Math.floor(100000 + Math.random() * 900000);
   const order = {
     amount: req.body.amount,
     description: "2B-flower",
     orderCode: MaDonHang,
-    items: req.body.product,
+    items: convertedProducts,
     returnUrl: `http://localhost:3000/information`,
     cancelUrl: `http://localhost:3000/cart`,
   };

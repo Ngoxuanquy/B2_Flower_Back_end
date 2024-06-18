@@ -225,6 +225,27 @@ class AccessService {
     return updateCart;
   }
 
+  static async updateRoles(params) {
+    const query = { _id: params.id };
+    const updateSet = {
+      $set: {
+        name: params.name,
+        email: params.email,
+        roles: params.roles,
+      },
+    };
+    const updateCart = await shopModel.updateOne(query, updateSet);
+
+    return updateCart;
+  }
+
+  static async getRoles({ userId }) {
+    console.log({ userId });
+    const user = await shopModel.findOne({ _id: userId }).lean();
+    console.log({ user });
+    return user.roles;
+  }
+
   static signUp = async ({ name, email, password }) => {
     try {
       const holderShop = await shopModel.findOne({ email }).lean();

@@ -34,6 +34,10 @@ var shopSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    countMessage: {
+      type: Number,
+      default: 0,
+    },
     address: {
       type: Array,
       default: [],

@@ -81,6 +81,20 @@ class UserService {
     }
   }
 
+  static async countMessage({ userId }) {
+    try {
+      const address = await shopModel.findById({ _id: userId }).lean();
+
+      if (!address) {
+        throw new Error("Address not found"); // Throw error if address not found
+      }
+
+      return getInfoData(["countMessage"], address);
+    } catch (error) {
+      return { error: "Failed to fetch address" };
+    }
+  }
+
   static async updateUserUn({ id }) {
     const query = { _id: id };
     const updateSet = {

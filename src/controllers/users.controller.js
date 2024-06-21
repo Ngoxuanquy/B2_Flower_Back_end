@@ -24,6 +24,14 @@ class UserController {
     }).send(res);
   }
 
+  static async countMessage(req, res, next) {
+    // console.log(req.params)
+    new SuccessResponse({
+      message: "get count success",
+      metadata: await UserService.countMessage(req.params),
+    }).send(res);
+  }
+
   static async updateUser(req, res, next) {
     console.log(req.params);
     new SuccessResponse({

@@ -225,6 +225,19 @@ class AccessService {
     return updateCart;
   }
 
+  static async updateCountMessage(paload) {
+    const query = { _id: paload.id };
+
+    const updateSet = {
+      $set: {
+        countMessage: paload.count,
+      },
+    };
+    const updateCart = await shopModel.updateOne(query, updateSet);
+
+    return updateCart;
+  }
+
   static async updateRoles(params) {
     const query = { _id: params.id };
     const updateSet = {

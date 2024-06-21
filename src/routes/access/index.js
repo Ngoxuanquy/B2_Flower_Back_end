@@ -13,6 +13,8 @@ router.post("/login", asyncHandler(accessController.login));
 router.post("/verifile", asyncHandler(accessController.verifile));
 
 router.post("/update_verify/:id", asyncHandler(accessController.updateVerify));
+router.post("/updateCountMessage", asyncHandler(accessController.updateCountMessage));
+
 router.post("/update_roles", asyncHandler(accessController.updateRoles));
 
 // authentication

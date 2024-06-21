@@ -18,6 +18,8 @@ router.post("/updateUn/:id", asyncHandler(UserController.updateUserUn));
 // router.delete('/', asyncHandler(TransactionController.d))
 router.post("/userId/:userId", asyncHandler(UserController.listToUser));
 router.get("/", asyncHandler(UserController.listToTransaction));
+router.get("/countMessage/:userId", asyncHandler(UserController.countMessage));
+
 router.post("/", asyncHandler(UserController.addToUser));
 
 module.exports = router;

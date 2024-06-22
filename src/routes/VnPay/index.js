@@ -24,20 +24,13 @@ router.post('/receive-hook', async (req, res) => {
 });
 
 router.post('/create-payment-link', async (req, res) => {
+    console.log(req.body);
     const MaDonHang = Math.floor(100000 + Math.random() * 900000);
     const order = {
-        amount: req.body.amount.toFixed(0),
+        amount: req.body.amount,
         description: '2B-flower',
-        buyerName: req.body.name,
-        buyerEmail: 'buyer-email@gmail.com',
-        buyerPhone: req.body.number,
-        buyerAddress:
-            req.body.user.diaChiCuThe +
-            req.body.user.phuongXa +
-            req.body.user.quanHuyen +
-            req.body.user.tinhThanh,
         orderCode: MaDonHang,
-        items: req.body.product,
+        item: req.body.product,
         returnUrl: `http://localhost:3000/information`,
         cancelUrl: `http://localhost:3000/cart`,
     };
@@ -50,5 +43,26 @@ router.post('/create-payment-link', async (req, res) => {
         res.status(500).send('Internal server error');
     }
 });
+
+//https://6515-1-54-8-247.ngrok-free.app
+
+function sortObject(obj) {
+    let sorted = {};
+    let str = [];
+    let key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            str.push(encodeURIComponent(key));
+        }
+    }
+    str.sort();
+    for (key = 0; key < str.length; key++) {
+        sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(
+            /%20/g,
+            '+',
+        );
+    }
+    return sorted;
+}
 
 module.exports = router;

@@ -5,20 +5,29 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
 const http = require("http");
-
+// const session = require("express-session");
 const morgan = require("morgan");
 const { checkOverload } = require("./helpers/check.connect");
 const chatController = require("./controllers/chatController");
 const app = express();
-
 const server = http.createServer(app);
 
 const io = socketIo(server);
 
+app.use(
+  session({
+    secret: "your-secret-key", // Thay thế bằng một chuỗi bất kỳ để mã hóa session
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Nếu bạn chỉ sử dụng HTTPS, đặt là true
+  })
+);
+
 // init middlewares
-app.use(cookieParser());
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(

@@ -5,12 +5,17 @@ const asyncHandler = require("../../helpers/asyncHandle");
 
 const router = express.Router();
 
+router.get("/get_roles/:userId", asyncHandler(accessController.getRoles));
+
 router.post("/signup", asyncHandler(accessController.signUp));
 router.post("/loginFB_GG", asyncHandler(accessController.loginFB_GG));
 router.post("/login", asyncHandler(accessController.login));
 router.post("/verifile", asyncHandler(accessController.verifile));
 
 router.post("/update_verify/:id", asyncHandler(accessController.updateVerify));
+router.post("/updateCountMessage", asyncHandler(accessController.updateCountMessage));
+
+router.post("/update_roles", asyncHandler(accessController.updateRoles));
 
 // authentication
 

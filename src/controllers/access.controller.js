@@ -68,6 +68,24 @@ class AccessController {
       metadata: await AccessService.updateVerify(req.params),
     }).send(res);
   };
+  updateCountMessage = async (req, res, next) => {
+    new SuccessResponse({
+      message: "update count message success",
+      metadata: await AccessService.updateCountMessage(req.body),
+    }).send(res);
+  };
+  updateRoles = async (req, res, next) => {
+    new SuccessResponse({
+      message: "update user success",
+      metadata: await AccessService.updateRoles(req.body),
+    }).send(res);
+  };
+  getRoles = async (req, res, next) => {
+    new SuccessResponse({
+      message: "update user success",
+      metadata: await AccessService.getRoles(req.params),
+    }).send(res);
+  };
 }
 
 module.exports = new AccessController();

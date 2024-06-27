@@ -263,7 +263,7 @@ class AccessService {
     try {
       const holderShop = await shopModel.findOne({ email }).lean();
       if (holderShop) {
-        throw new BadRequestError("Error: Shop already registered");
+        throw new BadRequestError("Gmail đã được đăng ký!!");
       }
       const verificationCode = randomstring.generate(6);
       const transporter = nodemailer.createTransport({
@@ -284,6 +284,7 @@ class AccessService {
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
+          throw new BadRequestError("Gmail không tồn tại!!");
         } else {
           emailModel.create({
             email: email,

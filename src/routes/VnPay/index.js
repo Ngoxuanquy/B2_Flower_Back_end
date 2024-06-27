@@ -74,7 +74,6 @@ router.post("/receive-hook", async (req, res) => {
     </tbody>
   </table>
 
-    <p>Tổng thanh toán: ${ORDERS.products.reduce((total, item) => total + item.quantity * item.product_price, 0) + phiShip}</p>
   <p>Vui lòng xác nhận đơn hàng của bạn.</p>
 `;
 
@@ -141,7 +140,6 @@ router.post("/receive-hook", async (req, res) => {
     return createdTransaction;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to create user transaction.");
   }
   //   }
 });

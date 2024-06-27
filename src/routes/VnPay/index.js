@@ -25,6 +25,7 @@ const router = express.Router();
 router.use(express.static("public"));
 router.use(express.json());
 router.post("/receive-hook", async (req, res) => {
+  console.log(req.body);
   res.json(req.body);
 
   if (res.data?.desc == "Thành công") {

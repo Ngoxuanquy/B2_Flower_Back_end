@@ -28,7 +28,7 @@ router.post("/receive-hook", async (req, res) => {
   console.log(req.body);
   res.json(req.body);
 
-  if (res?.desc == "success") {
+  if (res.body?.desc == "success") {
     const newTransaction = new transaction({
       transaction_state: "active",
       userId: ORDERS.userId,

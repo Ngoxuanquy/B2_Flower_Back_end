@@ -56,7 +56,7 @@ router.post("/receive-hook", async (req, res) => {
       </tr>
     </thead>
     <tbody>
-      ${product
+      ${ORDERS.products
         .map(
           (item) => `
         <tr>
@@ -74,7 +74,7 @@ router.post("/receive-hook", async (req, res) => {
     </tbody>
   </table>
 
-    <p>Tổng thanh toán: ${product.reduce((total, item) => total + item.quantity * item.product_price, 0) + phiShip}</p>
+    <p>Tổng thanh toán: ${ORDERS.products.reduce((total, item) => total + item.quantity * item.product_price, 0) + phiShip}</p>
   <p>Vui lòng xác nhận đơn hàng của bạn.</p>
 `;
 

@@ -116,13 +116,9 @@ class TransactionService {
     return deleteCart;
   }
 
-  static async updateStatus({ userId, product }) {
-    console.log(JSON.stringify(product));
-    console.log({ userId });
-
+  static async updateStatus({ transactionId }) {
     const query = {
-        userId: userId,
-        transaction_products: product,
+        _id: transactionId,
       },
       updateSet = {
         $set: {
@@ -222,8 +218,26 @@ class TransactionService {
         })
         .lean();
 
+      console.log({ transactions });
+
       // Return an array of matching documents
       return transactions;
+    } catch (error) {
+      // Handle any errors (e.g., database connection error)
+      console.error("Error fetching user transactions:", error);
+      throw error;
+    }
+  }
+
+  static async deleteTransaction({ transactionId }) {
+    try {
+      // Use the 'findMany' method to find multiple documents where 'userId' matches
+      const transactions = await transaction.deleteOne({ _id: transactionId }).lean();
+
+      // Return an array of matching documents
+      return {
+        mgs: "Hủy đơn hàng thành công!!",
+      };
     } catch (error) {
       // Handle any errors (e.g., database connection error)
       console.error("Error fetching user transactions:", error);

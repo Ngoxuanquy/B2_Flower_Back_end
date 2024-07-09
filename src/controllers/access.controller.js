@@ -45,6 +45,13 @@ class AccessController {
     }).send(res);
   };
 
+  forgotPassword = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Success",
+      metadata: await AccessService.forgotPassword(req.body),
+    }).send(res);
+  };
+
   loginFB_GG = async (req, res, next) => {
     new SuccessResponse({
       message: "Success",

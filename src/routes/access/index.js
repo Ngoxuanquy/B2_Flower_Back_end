@@ -12,6 +12,8 @@ router.post("/loginFB_GG", asyncHandler(accessController.loginFB_GG));
 router.post("/login", asyncHandler(accessController.login));
 router.post("/verifile", asyncHandler(accessController.verifile));
 
+router.post("/forgot_password", asyncHandler(accessController.forgotPassword));
+
 router.post("/update_verify/:id", asyncHandler(accessController.updateVerify));
 router.post("/updateCountMessage", asyncHandler(accessController.updateCountMessage));
 

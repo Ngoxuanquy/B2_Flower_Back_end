@@ -14,10 +14,11 @@ router.post("/update", asyncHandler(TransactionController.update));
 // router.delete('/', asyncHandler(TransactionController.d))
 router.get("/shopId/:shopId", asyncHandler(TransactionController.listToTransactionByShop));
 router.post("/getTransaction/:userId", asyncHandler(TransactionController.listToTransaction));
-router.post("/updateStatus", asyncHandler(TransactionController.updateStatus));
-router.post("/getFull", asyncHandler(TransactionController.getFull));
-router.post("/getFullOrder_done", asyncHandler(TransactionController.getFullOrder_done));
+router.post("/updateStatus/:transactionId", asyncHandler(TransactionController.updateStatus));
+router.get("/getFull", asyncHandler(TransactionController.getFull));
+router.get("/getFullOrder_done", asyncHandler(TransactionController.getFullOrder_done));
 router.get("/getFullUseId/:userId", asyncHandler(TransactionController.getFullUseId));
 router.get("/getFullOrder_doneUseId/:userId", asyncHandler(TransactionController.getFullOrder_doneUseId));
+router.post("/deleteTransaction/:transactionId", asyncHandler(TransactionController.deleteTransaction));
 
 module.exports = router;

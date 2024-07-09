@@ -30,22 +30,22 @@ router.post("/receive-hook", async (req, res) => {
 
   res.json(req.body);
 
-  //   if (res.body?.desc == "success") {
-  console.log("ngô xuân quy");
-  const newTransaction = new transaction({
-    transaction_state: "active",
-    userId: ORDERS.userId,
-    // transaction_ShopId: shopId,
-    transaction_products: ORDERS.products,
-    payment_expression: ORDERS.price,
-    transaction_userId: [ORDERS.user],
-    notifications: "Đã thanh toán",
-  });
+  if (res.body?.desc == "success") {
+    console.log("ngô xuân quy");
+    const newTransaction = new transaction({
+      transaction_state: "active",
+      userId: ORDERS.userId,
+      // transaction_ShopId: shopId,
+      transaction_products: ORDERS.products,
+      payment_expression: ORDERS.price,
+      transaction_userId: [ORDERS.user],
+      notifications: "Đã thanh toán",
+    });
 
-  try {
-    const createdTransaction = await newTransaction.save();
+    try {
+      const createdTransaction = await newTransaction.save();
 
-    const htmlContent = `
+      const htmlContent = `
   <h2>Đơn hàng đã đặt</h2>
   <table style="width: 100%; border-collapse: collapse;">
     <thead>
@@ -77,71 +77,73 @@ router.post("/receive-hook", async (req, res) => {
   <p>Vui lòng xác nhận đơn hàng của bạn.</p>
 `;
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "ngoxuanquy1812@gmail.com",
-        pass: "bgoz fvvx raus cqjo", // Consider using environment variables for sensitive information
-      },
-    });
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "ngoxuanquy1812@gmail.com",
+          pass: "bgoz fvvx raus cqjo", // Consider using environment variables for sensitive information
+        },
+      });
 
-    const mailOptions = {
-      from: "ngoxuanquy1812@gmail.com",
-      to: ORDERS.email,
-      subject: "Verification Code",
-      html: htmlContent,
-    };
+      const mailOptions = {
+        from: "ngoxuanquy1812@gmail.com",
+        to: ORDERS.email,
+        subject: "Verification Code",
+        html: htmlContent,
+      };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-      } else {
-        try {
-          // Find the old cart data based on userId
-          const oldCart = cart.findOne({ userId: ORDERS.userId });
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          try {
+            // Find the old cart data based on userId
+            const oldCart = cart.findOne({ userId: ORDERS.userId });
 
-          if (!oldCart) {
-            throw new Error("Cart not found.");
-          }
-
-          // Convert old and new data to JSON strings for comparison
-          const oldCartJSON = JSON.stringify(oldCart.cart_products);
-          const newCartDataJSON = JSON.stringify(ORDERS.products);
-
-          if (oldCartJSON === newCartDataJSON) {
-            // If the data is equal, delete the cart
-            cart.deleteOne({ userId: userId });
-            return null; // Indicate that the cart has been deleted
-          } else {
-            // Compare old and new data to find new items in newCartData
-            for (const newItem of newCartData) {
-              oldCart.cart_products.forEach((product, index) => {
-                if (newItem._id === product._id) {
-                  oldCart.cart_products.splice(index, 1); // Loại bỏ phần tử tại vị trí index
-                }
-              });
+            if (!oldCart) {
+              throw new Error("Cart not found.");
             }
-            // Update the cart with the filtered cart_products
-            const updatedCart = cart.findOneAndUpdate(
-              { userId: userId },
-              { $set: { cart_products: oldCart.cart_products } },
-              { new: true }
-            );
 
-            return updatedCart;
+            // Convert old and new data to JSON strings for comparison
+            const oldCartJSON = JSON.stringify(oldCart.cart_products);
+            const newCartDataJSON = JSON.stringify(ORDERS.products);
+
+            if (oldCartJSON === newCartDataJSON) {
+              // If the data is equal, delete the cart
+              cart.deleteOne({ userId: userId });
+              return null; // Indicate that the cart has been deleted
+            } else {
+              // Compare old and new data to find new items in newCartData
+              for (const newItem of newCartDataJSON) {
+                oldCart.cart_products.forEach((product, index) => {
+                  if (newItem._id === product._id) {
+                    oldCart.cart_products.splice(index, 1); // Loại bỏ phần tử tại vị trí index
+                  }
+                });
+              }
+              // Update the cart with the filtered cart_products
+              const updatedCart = cart.findOneAndUpdate(
+                { userId: userId },
+                { $set: { cart_products: oldCart.cart_products } },
+                { new: true }
+              );
+
+              return updatedCart;
+            }
+          } catch (error) {
+            console.error(error);
+            throw new Error("Failed to update transaction.");
           }
-        } catch (error) {
-          console.error(error);
-          throw new Error("Failed to update transaction.");
         }
-      }
-    });
+      });
 
-    return createdTransaction;
-  } catch (error) {
-    console.error(error);
+      return createdTransaction;
+    } catch (error) {
+      console.error(error);
+    }
+  } else {
+    console.log("quyquyquy");
   }
-  //   }
 });
 
 // Route to create a payment link

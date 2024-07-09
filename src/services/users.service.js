@@ -70,7 +70,7 @@ class UserService {
   static async getAddressUser({ userId }) {
     try {
       const address = await shopModel.findById(userId).lean();
-
+      console.log(address);
       if (!address) {
         throw new Error("Address not found"); // Throw error if address not found
       }

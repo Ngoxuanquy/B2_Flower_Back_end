@@ -306,6 +306,61 @@ class AccessService {
     }
   };
 
+  static forgotPassword = async ({ email }) => {
+    try {
+      const holderShop = await shopModel.findOne({ email }); // Remove .lean() here
+      if (!holderShop) {
+        throw new BadRequestError("Không tồn tại Gmail!!");
+      }
+      const verificationCode = randomstring.generate(6);
+      holderShop.password = await bcrypt.hash(verificationCode, 10); // Ensure bcrypt.hash() is awaited
+
+      await holderShop.save(); // Save the modified document
+
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "ngoxuanquy1812@gmail.com",
+          pass: "bgoz fvvx raus cqjo", // Consider using environment variables for sensitive information
+        },
+      });
+
+      const mailOptions = {
+        from: "ngoxuanquy1812@gmail.com",
+        to: email,
+        subject: "Thay đổi mật khẩu",
+        html: `<div>Mật khẩu mới của bạn là : <b> ${verificationCode}</b>
+        <div>
+        Vui lòng đừng quên nữa
+        </div>
+      </div>`,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          throw new BadRequestError("Gmail không tồn tại!!");
+        } else {
+          // emailModel.create({
+          //   email: email,
+          //   code: verificationCode,
+          // });
+        }
+      });
+
+      return {
+        code: 200,
+        metadata: null,
+      };
+    } catch (error) {
+      return {
+        code: "xxx",
+        msg: error.message,
+        status: "error",
+      };
+    }
+  };
+
   static verifile = async ({ email, password, code }) => {
     const codeShop = await emailModel.findOne({ email }).lean();
     if (!codeShop) {

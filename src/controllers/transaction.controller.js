@@ -26,7 +26,7 @@ class TransactionController {
 
   static async getFull(req, res, next) {
     new SuccessResponse({
-      message: "deleted Cart success",
+      message: "get transtion success",
       metadata: await TransactionService.getFull(),
     }).send(res);
   }
@@ -53,10 +53,17 @@ class TransactionController {
     }).send(res);
   }
 
+  static async deleteTransaction(req, res, next) {
+    new SuccessResponse({
+      message: "deleted transaction success",
+      metadata: await TransactionService.deleteTransaction(req.params),
+    }).send(res);
+  }
+
   static async updateStatus(req, res, next) {
     new SuccessResponse({
       message: "update Cart success",
-      metadata: await TransactionService.updateStatus(req.body),
+      metadata: await TransactionService.updateStatus(req.params),
     }).send(res);
   }
 

@@ -26,7 +26,7 @@ router.use(express.static("public"));
 router.use(express.json());
 router.post("/receive-hook", async (req, res) => {
   console.log(req.body);
-  const webhookData = payOS.verifyPaymentWebhookData(req.body);
+  const webhookData = payos.verifyPaymentWebhookData(req.body);
 
   console.log({ webhookData });
 

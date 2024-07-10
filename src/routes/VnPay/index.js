@@ -2,11 +2,11 @@ const express = require("express");
 const Payos = require("@payos/node");
 const { transaction } = require("../../models/transaction.model");
 const { cart } = require("../../models/cart.model");
-
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const { orderPayOs } = require("../../models/orderPayOs.model");
 const session = require("express-session");
+
 const payos = new Payos(
   "a0c7a8fb-00dc-426c-ba85-41179a28b1df",
   "5f405556-7b3b-4359-a5e9-cc25e4518e99",
@@ -19,15 +19,57 @@ const ORDERS = {
   price: null,
   user: [],
   email: null,
+  paymentLinkCreated: false, // Flag to track if payment link was created
 };
 
 const router = express.Router();
 router.use(express.static("public"));
 router.use(express.json());
+
+router.post("/create-payment-link", async (req, res) => {
+  ORDERS.products = req.body?.product;
+  ORDERS.userId = req.body?.userId;
+  ORDERS.price = req.body?.amount;
+  ORDERS.user = req.body?.selectedValueAdress;
+  ORDERS.email = req.body?.email;
+  ORDERS.paymentLinkCreated = true; // Set the flag when payment link is created
+
+  const convertedProducts = req.body?.product.map((product) => ({
+    name: product.product_name,
+    quantity: product.quantity,
+    price: product.product_price,
+  }));
+
+  console.log(req.body);
+
+  const MaDonHang = Math.floor(100000 + Math.random() * 900000);
+  const order = {
+    amount: req.body.amount,
+    description: "2B-flower",
+    orderCode: MaDonHang,
+    items: convertedProducts,
+    returnUrl: `http://localhost:3000/information`,
+    cancelUrl: `http://localhost:3000/cart`,
+  };
+
+  try {
+    const paymentLink = await payos.createPaymentLink(order);
+
+    res.json(paymentLink.checkoutUrl);
+  } catch (error) {
+    console.error("Error creating payment link:", error.message);
+    res.status(500).send("Internal server error");
+  }
+});
+
 router.post("/receive-hook", async (req, res) => {
   console.log(req.body);
-  const webhookData = payos.verifyPaymentWebhookData(req.body);
 
+  if (!ORDERS.paymentLinkCreated) {
+    return res.status(400).send("Payment link not created");
+  }
+
+  const webhookData = payos.verifyPaymentWebhookData(req.body);
   console.log({ webhookData });
 
   res.json(req.body);
@@ -37,7 +79,6 @@ router.post("/receive-hook", async (req, res) => {
     const newTransaction = new transaction({
       transaction_state: "active",
       userId: ORDERS.userId,
-      // transaction_ShopId: shopId,
       transaction_products: ORDERS.products,
       payment_expression: ORDERS.price,
       transaction_userId: [ORDERS.user],
@@ -112,7 +153,7 @@ router.post("/receive-hook", async (req, res) => {
 
             if (oldCartJSON === newCartDataJSON) {
               // If the data is equal, delete the cart
-              cart.deleteOne({ userId: userId });
+              cart.deleteOne({ userId: ORDERS.userId });
               return null; // Indicate that the cart has been deleted
             } else {
               // Compare old and new data to find new items in newCartData
@@ -125,7 +166,7 @@ router.post("/receive-hook", async (req, res) => {
               }
               // Update the cart with the filtered cart_products
               const updatedCart = cart.findOneAndUpdate(
-                { userId: userId },
+                { userId: ORDERS.userId },
                 { $set: { cart_products: oldCart.cart_products } },
                 { new: true }
               );
@@ -145,42 +186,6 @@ router.post("/receive-hook", async (req, res) => {
     }
   } else {
     console.log("quyquyquy");
-  }
-});
-
-// Route to create a payment link
-router.post("/create-payment-link", async (req, res) => {
-  ORDERS.products = req.body?.product;
-  ORDERS.userId = req.body?.userId;
-  ORDERS.price = req.body?.amount;
-  ORDERS.user = req.body?.selectedValueAdress;
-  ORDERS.email = req.body?.email;
-
-  const convertedProducts = req.body?.product.map((product) => ({
-    name: product.product_name,
-    quantity: product.quantity,
-    price: product.product_price,
-  }));
-
-  console.log(req.body);
-
-  const MaDonHang = Math.floor(100000 + Math.random() * 900000);
-  const order = {
-    amount: req.body.amount,
-    description: "2B-flower",
-    orderCode: MaDonHang,
-    items: convertedProducts,
-    returnUrl: `http://localhost:3000/information`,
-    cancelUrl: `http://localhost:3000/cart`,
-  };
-
-  try {
-    const paymentLink = await payos.createPaymentLink(order);
-
-    res.json(paymentLink.checkoutUrl);
-  } catch (error) {
-    console.error("Error creating payment link:", error.message);
-    res.status(500).send("Internal server error");
   }
 });
 

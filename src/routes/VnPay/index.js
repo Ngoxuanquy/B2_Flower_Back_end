@@ -26,11 +26,13 @@ router.use(express.static("public"));
 router.use(express.json());
 router.post("/receive-hook", async (req, res) => {
   console.log(req.body);
-  console.log({ test: res.body?.data.desc });
+  const webhookData = payOS.verifyPaymentWebhookData(req.body);
+
+  console.log({ webhookData });
 
   res.json(req.body);
 
-  if (res.body?.data.desc == "success") {
+  if (webhookData?.desc == "success") {
     console.log("ngô xuân quy");
     const newTransaction = new transaction({
       transaction_state: "active",
@@ -143,6 +145,9 @@ router.post("/receive-hook", async (req, res) => {
     }
   } else {
     console.log("quyquyquy");
+    res.json(req.body);
+
+    console.log(req.body);
   }
 });
 

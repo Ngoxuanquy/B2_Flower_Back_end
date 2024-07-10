@@ -26,11 +26,11 @@ router.use(express.static("public"));
 router.use(express.json());
 router.post("/receive-hook", async (req, res) => {
   console.log(req.body);
-  console.log({ test: res.body?.desc });
+  console.log({ test: res.body?.data.desc });
 
   res.json(req.body);
 
-  if (res.body?.desc == "success") {
+  if (res.body?.data.desc == "success") {
     console.log("ngô xuân quy");
     const newTransaction = new transaction({
       transaction_state: "active",

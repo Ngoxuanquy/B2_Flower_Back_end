@@ -32,7 +32,7 @@ router.post("/receive-hook", async (req, res) => {
 
   res.json(req.body);
 
-  if (webhookData?.desc == "success") {
+  if (webhookData?.desc == "Thành công") {
     console.log("ngô xuân quy");
     const newTransaction = new transaction({
       transaction_state: "active",
@@ -145,9 +145,6 @@ router.post("/receive-hook", async (req, res) => {
     }
   } else {
     console.log("quyquyquy");
-    res.json(req.body);
-
-    console.log(req.body);
   }
 });
 

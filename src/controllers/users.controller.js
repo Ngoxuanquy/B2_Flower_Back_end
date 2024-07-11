@@ -40,6 +40,14 @@ class UserController {
     }).send(res);
   }
 
+  static async updateMoney(req, res, next) {
+    console.log(req.params);
+    new SuccessResponse({
+      message: "getList Cart success",
+      metadata: await UserService.updateMoney(req.body),
+    }).send(res);
+  }
+
   static async updateAddress(req, res, next) {
     new SuccessResponse({
       message: "update address user success",

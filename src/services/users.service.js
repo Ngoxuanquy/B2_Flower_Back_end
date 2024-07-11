@@ -2,6 +2,7 @@ const { NotFoundError } = require("../core/error.response");
 const shopModel = require("../models/shop.model");
 // const { getProductById } = require('../models/repositories/product.repo')
 const { getInfoData } = require("../utils");
+const payos = require("../utils/payos");
 
 class UserService {
   static async createUsers({ user, product, shopId }) {
@@ -48,6 +49,25 @@ class UserService {
     return updateCart;
   }
 
+  static async updateMoney({ userId, moneys }) {
+    try {
+      const user = await shopModel.findOne({ _id: userId });
+
+      if (user) {
+        const currentMoney = user.moneys || 0;
+
+        user.moneys = currentMoney + moneys;
+        // console.log(userCart)
+        return user.save();
+      } else {
+        throw new Error("User not found");
+      }
+    } catch (error) {
+      console.error("Error updating address:", error);
+      return { error: "Failed to update address" };
+    }
+  }
+
   static async updateAddress(body) {
     try {
       const user = await shopModel.findOne({ _id: body.userId });
@@ -75,7 +95,7 @@ class UserService {
         throw new Error("Address not found"); // Throw error if address not found
       }
 
-      return getInfoData(["address", "name", "number"], address);
+      return getInfoData(["address", "name", "number", "moneys"], address);
     } catch (error) {
       return { error: "Failed to fetch address" };
     }

@@ -39,6 +39,9 @@ const TransactionSchema = new Schema(
     payment_expression: {
       type: String,
     },
+    total_amounts: {
+      type: Number,
+    },
   },
   {
     collection: COLLECTION_NAME,

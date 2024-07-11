@@ -42,6 +42,10 @@ var shopSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    moneys: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

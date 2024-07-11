@@ -11,6 +11,8 @@ router.use(authenticationV2);
 
 router.get("/getAddressUser/:userId", asyncHandler(UserController.getAddressUser));
 router.post("/update/:id", asyncHandler(UserController.updateUser));
+router.post("/updateMoney/:userId", asyncHandler(UserController.updateMoney));
+
 router.post("/updateAddress", asyncHandler(UserController.updateAddress));
 
 router.post("/updateUn/:id", asyncHandler(UserController.updateUserUn));

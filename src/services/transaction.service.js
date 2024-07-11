@@ -22,7 +22,7 @@ class TransactionService {
   //     return await transaction.create(query, updateOrInsert, options)
   // }
 
-  static async createUserTransaction({ user, product, shopId, paymentExpression, notifications, phiShip, email }) {
+  static async createUserTransaction({ user, product, shopId, paymentExpression, notifications, phiShip, email, total_amounts }) {
     const newTransaction = new transaction({
       transaction_state: "active",
       userId: user._id,
@@ -31,6 +31,7 @@ class TransactionService {
       payment_expression: paymentExpression,
       transaction_userId: [user],
       notifications: notifications || "null",
+      total_amounts: total_amounts + Number(phiShip),
     });
 
     try {

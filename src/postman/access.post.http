@@ -17,7 +17,7 @@ Content-Type: application/json
 x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
 
 {
-    "email": "121",
+    "email": "1",
     "password": "1"
 }
 
@@ -55,6 +55,28 @@ x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831
     "email": "121",
     "password": "1"
 }
+
+###
+post {{url_dev}}/product/updateQuantity
+Content-Type: application/json
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
+x-client-id: 653d44f82c8e9a8f5bc2c1fa
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTNkNDRmODJjOGU5YThmNWJjMmMxZmEiLCJlbWFpbCI6IjEiLCJpYXQiOjE3MjA3NTM2NzQsImV4cCI6MTcyMDkyNjQ3NH0.MavOzZ-qKAqb2MJdGRJxnAyAdCXbfNYzekSJnliwxiM
+
+[
+{
+    "id": "654206e2f5dd24808ce26cf6",
+    "quantity": 2
+},
+{
+    "id": "65420826f5dd24808ce26d32",
+    "quantity": 5
+},
+{
+    "id": "654207d0f5dd24808ce26d1a",
+    "quantity": 9
+}
+]
 ###
 
 POST {{url_dev}}/shop/login
@@ -62,7 +84,7 @@ Content-Type: application/json
 x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
 
 {
-    "email": "121",
+    "email": "1",
     "password": "1"
 }
 

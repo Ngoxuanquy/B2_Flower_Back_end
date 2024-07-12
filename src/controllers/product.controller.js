@@ -58,6 +58,13 @@ class ProductController {
     }).send(res);
   };
 
+  updateQuantity = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Get list search success",
+      metadata: await ProductServiceV2.updateQuantity(req.body),
+    }).send(res);
+  };
+
   findAllProducts = async (req, res, next) => {
     console.log(req.body);
 

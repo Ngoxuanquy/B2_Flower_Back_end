@@ -13,6 +13,7 @@ const {
   getProductById,
   getProductAll,
   deleteProductById,
+  updateQuantity,
 } = require("../models/repositories/product.repo");
 const { removeUndefinedObject, updateNestedObjectParser } = require("../utils");
 
@@ -56,6 +57,10 @@ class ProductFactory {
 
   static async searchProduct({ keySearch }) {
     return await searchProductByUser({ keySearch });
+  }
+
+  static async updateQuantity(payload) {
+    return await updateQuantity(payload);
   }
 
   static async findAllProducts(paload) {

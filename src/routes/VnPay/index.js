@@ -76,14 +76,13 @@ router.get("/abc/:orderId", async (req, res) => {
       });
     }
     console.log({ order: ORDERS });
-    if (order?.status === "PAID") {
-      console.log("ngô xuân quy");
+    if (order?.status === "PAID" && ORDERS.userId !== null) {
       const newTransaction = new transaction({
         transaction_state: "active",
         userId: ORDERS?.userId,
         transaction_products: ORDERS?.products,
         payment_expression: ORDERS?.price,
-        transaction_userId: [ORDERS?.user],
+        transaction_userId: ORDERS?.user,
         notifications: "Đã thanh toán",
         total_amounts: ORDERS?.price,
       });
@@ -171,6 +170,7 @@ router.get("/abc/:orderId", async (req, res) => {
           if (error) {
             console.log(error);
           } else {
+            ORDERS.userId = null;
           }
         });
 

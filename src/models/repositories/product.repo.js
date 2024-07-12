@@ -33,6 +33,25 @@ const searchProductByUser = async ({ keySearch }) => {
   return result.map((item) => item.item);
 };
 
+const updateQuantity = async (payload) => {
+  try {
+    console.log(payload);
+    const results = [];
+    for (const item of payload) {
+      const filter = { _id: item.id };
+      const update = { $inc: { product_quantity: item.quantity } };
+      const options = { upsert: false }; // upsert: false nghĩa là không chèn tài liệu mới nếu không tìm thấy tài liệu phù hợp
+
+      const result = await product.updateOne(filter, update, options);
+      results.push(result);
+    }
+    return results;
+  } catch (error) {
+    console.error("Error updating quantities:", error);
+    throw error;
+  }
+};
+
 const findAllProducts = async ({ limit, sort, page, filter, select }) => {
   const skip = (page - 1) * limit;
   const sortBy = sort === "ctime" ? { _id: -1 } : { id: 1 };
@@ -123,4 +142,5 @@ module.exports = {
   getProductById,
   getProductAll,
   deleteProductById,
+  updateQuantity,
 };

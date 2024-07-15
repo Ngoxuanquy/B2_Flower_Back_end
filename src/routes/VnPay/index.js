@@ -46,7 +46,7 @@ router.post("/create-payment-link", async (req, res) => {
   console.log(req.body);
 
   const order = {
-    amount: req.body.amount,
+    amount: Number(req.body.amount.replace(".", "")),
     description: "2B-flower",
     orderCode: req.body?.MaDonHang,
     items: convertedProducts,
@@ -110,13 +110,18 @@ router.get("/abc/:orderId", async (req, res) => {
         } else {
           // Compare old and new data to find new items in newCartData
           ORDERS?.products?.forEach((newItem) => {
-            oldCart.cart_products = oldCart.cart_products?.filter((product) => newItem._id !== product._id);
+            oldCart.cart_products = oldCart.cart_products?.filter(
+              (product) => newItem._id !== product._id
+            );
           });
 
           console.log({ test: oldCart.cart_products });
 
           // Update the cart with the filtered cart_products
-          await cart.updateOne({ cart_userId: ORDERS.userId }, { $set: { cart_products: oldCart.cart_products } });
+          await cart.updateOne(
+            { cart_userId: ORDERS.userId },
+            { $set: { cart_products: oldCart.cart_products } }
+          );
         }
 
         const htmlContent = `

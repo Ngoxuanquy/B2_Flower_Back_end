@@ -4,9 +4,12 @@ const productController = require("../../controllers/product.controller");
 const asyncHandler = require("../../helpers/asyncHandle");
 
 const router = express.Router();
-
+router.post("/updateProduct", asyncHandler(productController.updateProduct));
 router.post("/getAll", asyncHandler(productController.getproductAll));
-router.post("/search/:keySearch", asyncHandler(productController.getListSearchProduct));
+router.post(
+  "/search/:keySearch",
+  asyncHandler(productController.getListSearchProduct)
+);
 router.post("/page/:page", asyncHandler(productController.findAllProducts));
 router.get("/:product_id", asyncHandler(productController.findProduct));
 
@@ -19,16 +22,27 @@ router.use(authenticationV2);
 
 router.post("/", asyncHandler(productController.createProduct));
 router.post("/updateQuantity", asyncHandler(productController.updateQuantity));
-router.patch("/:productId", asyncHandler(productController.updateProduct));
 
 //delete
-router.post("/delete/:productId", asyncHandler(productController.deleteproductAll));
+router.post(
+  "/delete/:productId",
+  asyncHandler(productController.deleteproductAll)
+);
 
-router.post("/publish/:id", asyncHandler(productController.publicProductByShop));
-router.post("/unpublish/:id", asyncHandler(productController.unPublicProductByShop));
+router.post(
+  "/publish/:id",
+  asyncHandler(productController.publicProductByShop)
+);
+router.post(
+  "/unpublish/:id",
+  asyncHandler(productController.unPublicProductByShop)
+);
 
 // QUERY
 router.get("/drafts/all", asyncHandler(productController.getAllDraftForShop));
-router.get("/published/all", asyncHandler(productController.getAllPublishForShop));
+router.get(
+  "/published/all",
+  asyncHandler(productController.getAllPublishForShop)
+);
 
 module.exports = router;

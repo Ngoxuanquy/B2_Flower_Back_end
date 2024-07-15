@@ -1,5 +1,10 @@
 const { BadRequestError } = require("../core/error.response");
-const { product, clothing, electronic, furniture } = require("../models/product.model");
+const {
+  product,
+  clothing,
+  electronic,
+  furniture,
+} = require("../models/product.model");
 const { inserInventory } = require("../models/repositories/inventory.repo");
 const {
   findAllDraftsForShop,
@@ -31,16 +36,45 @@ class ProductFactory {
 
     console.log({ productClass });
 
-    if (!productClass) throw new BadRequestError(`Invalid product type ${type}`);
+    if (!productClass)
+      throw new BadRequestError(`Invalid product type ${type}`);
     return new productClass(payload).createProduct();
   }
 
   // end create
 
-  static async updateProduct(type, productId, payload) {
-    const productClass = ProductFactory.productRegistry[type];
-    if (!productClass) throw new BadRequestError(`Invalid product type ${type}`);
-    return new productClass(payload).updateProduct(productId);
+  static async updateProduct(payload) {
+    try {
+      // Tìm sản phẩm để cập nhật
+      const Product = await product.findById(payload.productId);
+
+      // Kiểm tra nếu sản phẩm tồn tại
+      if (Product) {
+        // Cập nhật các thuộc tính sản phẩm từ payload
+        Object.assign(Product, {
+          product_name: payload.product_name,
+          product_price: payload.product_price,
+          product_description: payload.product_description,
+          product_type: payload.product_type,
+          product_quantity: payload.product_quantity,
+          product_thumb: payload.product_thumb,
+          product_attributes: payload.product_attributes,
+        });
+
+        // Lưu sản phẩm đã cập nhật và chờ hoàn thành
+        await Product.save();
+
+        // Trả về payload đã cập nhật (hoặc có thể trả về thông báo thành công)
+        return payload;
+      } else {
+        // Trả về thông báo lỗi nếu không tìm thấy sản phẩm
+        throw new Error("Không tìm thấy sản phẩm để cập nhật.");
+      }
+    } catch (error) {
+      // Xử lý lỗi và trả về thông báo lỗi
+      console.error("Lỗi khi cập nhật sản phẩm:", error);
+      throw new Error("Có lỗi xảy ra khi cập nhật sản phẩm.");
+    }
   }
 
   // query
@@ -140,7 +174,11 @@ class Product {
     const newProduct = await product.create({ ...this, _id: product_id });
 
     if (newProduct) {
-      await inserInventory({ productId: product_id, shopId: this.product_shop, stock: this.product_quantity });
+      await inserInventory({
+        productId: product_id,
+        shopId: this.product_shop,
+        stock: this.product_quantity,
+      });
     }
 
     return newProduct;
@@ -179,7 +217,10 @@ class Clothing extends Product {
       });
     }
 
-    const updateProduct = await super.updateProduct(productId, updateNestedObjectParser(objectParams));
+    const updateProduct = await super.updateProduct(
+      productId,
+      updateNestedObjectParser(objectParams)
+    );
 
     return updateProduct;
   }
@@ -191,7 +232,8 @@ class Electronics extends Product {
       ...this.product_attributes,
       product_shop: this.product_shop,
     });
-    if (!newElectronic) throw new BadRequestError("Create new Electronics error");
+    if (!newElectronic)
+      throw new BadRequestError("Create new Electronics error");
 
     const newProduct = await super.createProduct(newElectronic._id);
     if (!newProduct) throw new BadRequestError("Create new Product error");
@@ -211,7 +253,10 @@ class Electronics extends Product {
       });
     }
 
-    const updateProduct = await super.updateProduct(productId, updateNestedObjectParser(objectParams));
+    const updateProduct = await super.updateProduct(
+      productId,
+      updateNestedObjectParser(objectParams)
+    );
     return updateProduct;
   }
 }
@@ -222,7 +267,8 @@ class Furniture extends Product {
       ...this.product_attributes,
       product_shop: this.product_shop,
     });
-    if (!newFurniture) throw new BadRequestError("Create new newFurniture error");
+    if (!newFurniture)
+      throw new BadRequestError("Create new newFurniture error");
 
     const newProduct = await super.createProduct(newFurniture._id);
     if (!newProduct) throw new BadRequestError("Create new Product error");
@@ -242,7 +288,10 @@ class Furniture extends Product {
       });
     }
 
-    const updateProduct = await super.updateProduct(productId, updateNestedObjectParser(objectParams));
+    const updateProduct = await super.updateProduct(
+      productId,
+      updateNestedObjectParser(objectParams)
+    );
 
     return updateProduct;
   }

@@ -46,7 +46,7 @@ router.post("/create-payment-link", async (req, res) => {
   console.log(req.body);
 
   const order = {
-    amount: Number(req.body.amount.replace(".", "")),
+    amount: Number(req.body.amount),
     description: "2B-flower",
     orderCode: req.body?.MaDonHang,
     items: convertedProducts,

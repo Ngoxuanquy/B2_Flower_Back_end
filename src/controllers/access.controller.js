@@ -45,10 +45,17 @@ class AccessController {
     }).send(res);
   };
 
-  forgotPassword = async (req, res, next) => {
+  ResetPasswords = async (req, res, next) => {
     new SuccessResponse({
       message: "Success",
-      metadata: await AccessService.forgotPassword(req.body),
+      metadata: await AccessService.ResetPasswords(req.body),
+    }).send(res);
+  };
+
+  ResetPassword = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Success",
+      metadata: await AccessService.ResetPassword(req.body),
     }).send(res);
   };
 

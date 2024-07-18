@@ -7,6 +7,7 @@ const nodemailer = require("nodemailer");
 const { orderPayOs } = require("../../models/orderPayOs.model");
 const session = require("express-session");
 const PayOS = require("../../utils/payos");
+const shopModel = require("../../models/shop.model");
 
 const ORDERS = {
   products: [],
@@ -16,6 +17,11 @@ const ORDERS = {
   email: null,
   MaDonHang: null,
   paymentLinkCreated: false, // Flag to track if payment link was created
+};
+
+const DONNET = {
+  MaDonHang: null,
+  moneys: 0,
 };
 
 const router = express.Router();
@@ -60,6 +66,81 @@ router.post("/create-payment-link", async (req, res) => {
   } catch (error) {
     console.error("Error creating payment link:", error.message);
     res.status(500).send("Internal server error");
+  }
+});
+
+router.post("/create-payment-link-donet", async (req, res) => {
+  // Set the flag when payment link is created
+
+  const MaDonHang = Math.floor(100000 + Math.random() * 900000);
+  DONNET.MaDonHang = MaDonHang;
+  DONNET.userId = req.body.userId;
+
+  DONNET.moneys = Number(req.body.amount);
+  console.log(req.body);
+  const order = {
+    amount: Number(req.body.amount),
+    description: "2B-flower",
+    orderCode: MaDonHang,
+    returnUrl: `http://localhost:3000/information`,
+    cancelUrl: `http://localhost:3000/cart`,
+  };
+
+  try {
+    const paymentLink = await PayOS.createPaymentLink(order);
+    res.json(paymentLink.checkoutUrl);
+  } catch (error) {
+    console.error("Error creating payment link:", error.message);
+    res.status(500).send("Internal server error");
+  }
+});
+
+router.get("/statusDonet", async (req, res) => {
+  try {
+    if (DONNET.MaDonHang == null) {
+      return;
+    }
+    const order = await PayOS.getPaymentLinkInformation(DONNET.MaDonHang);
+
+    console.log({ order });
+    console.log({ MaDonHang: DONNET.MaDonHang });
+    console.log({ moneys: DONNET.moneys });
+
+    if (!order) {
+      return res.json({
+        error: -1,
+        message: "Failed to fetch order information",
+        data: null,
+      });
+    }
+
+    if (order?.status === "PAID" && DONNET.MaDonHang !== null) {
+      const user = await shopModel.findOne({ _id: DONNET.userId });
+
+      if (user) {
+        const currentMoney = user.moneys || 0;
+
+        user.moneys = currentMoney + DONNET.moneys;
+        // console.log(userCart)
+        DONNET.MaDonHang = null;
+        DONNET.moneys = 0;
+
+        return user.save();
+      }
+    }
+
+    res.json({
+      error: 0,
+      message: "Success",
+      data: order,
+    });
+  } catch (error) {
+    console.error("Error fetching order information:", error.message);
+    res.status(500).json({
+      error: -1,
+      message: "Internal server error",
+      data: null,
+    });
   }
 });
 

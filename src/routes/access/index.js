@@ -13,9 +13,13 @@ router.post("/login", asyncHandler(accessController.login));
 router.post("/verifile", asyncHandler(accessController.verifile));
 
 router.post("/forgot_password", asyncHandler(accessController.forgotPassword));
+router.post("/resert_password", asyncHandler(accessController.ResetPasswords));
 
 router.post("/update_verify/:id", asyncHandler(accessController.updateVerify));
-router.post("/updateCountMessage", asyncHandler(accessController.updateCountMessage));
+router.post(
+  "/updateCountMessage",
+  asyncHandler(accessController.updateCountMessage)
+);
 
 router.post("/update_roles", asyncHandler(accessController.updateRoles));
 
@@ -24,6 +28,9 @@ router.post("/update_roles", asyncHandler(accessController.updateRoles));
 router.use(authenticationV2);
 
 router.post("/logout", asyncHandler(accessController.logout));
-router.post("/handleRefreshToken", asyncHandler(accessController.handleRefreshToken));
+router.post(
+  "/handleRefreshToken",
+  asyncHandler(accessController.handleRefreshToken)
+);
 
 module.exports = router;

@@ -68,14 +68,20 @@ class UserService {
     }
   }
 
-  static async updateAddress(body) {
+  static async createAddress(body) {
     try {
       const user = await shopModel.findOne({ _id: body.userId });
 
       if (user) {
         const currentAddress = user.address || "";
 
-        user.address = [...currentAddress, body.address];
+        user.address = [
+          ...currentAddress,
+          {
+            ...body.address,
+            id: Math.floor(Math.random() * Date.now()).toString(36),
+          },
+        ];
         // console.log(userCart)
         return user.save();
       } else {
@@ -84,6 +90,64 @@ class UserService {
     } catch (error) {
       console.error("Error updating address:", error);
       return { error: "Failed to update address" };
+    }
+  }
+
+  static async updateAddress(body) {
+    try {
+      const user = await shopModel.findOne({ _id: body.userId });
+
+      if (user) {
+        const currentAddress = user.address;
+
+        const index = currentAddress.findIndex(
+          (address) => address.id === body.id
+        );
+        if (index !== -1) {
+          currentAddress[index] = {
+            ...currentAddress[index],
+            ...body.newAddress,
+          };
+          return user.save();
+        }
+
+        // console.log(userCart)
+      } else {
+        throw new Error("User not found");
+      }
+    } catch (error) {
+      console.error("Error updating address:", error);
+      return { error: "Failed to update address" };
+    }
+  }
+
+  static async deleteAddress({ userId, id }) {
+    try {
+      const user = await shopModel.findOne({ _id: userId });
+
+      if (user) {
+        const currentAddress = user.address;
+
+        // Find the index of the address with the specified id
+        const index = currentAddress.findIndex((address) => address.id === id);
+
+        if (index !== -1) {
+          // Remove the address from the currentAddress array
+          currentAddress.splice(index, 1);
+
+          // Save the updated user object
+          await user.save();
+
+          return { success: true, message: "Address deleted successfully" };
+        } else {
+          return { error: "Address not found" };
+        }
+      } else {
+        throw new Error("User not found");
+      }
+    } catch (error) {
+      console.error("Error deleting address:", error);
+      return { error: "Failed to delete address" };
     }
   }
 
@@ -152,7 +216,13 @@ class UserService {
       const userRoles = admin.roles;
       console.log({ userRoles });
 
-      const products = shopModel.find(filter).sort(sortBy).skip(skip).limit(limit).select(select).lean();
+      const products = shopModel
+        .find(filter)
+        .sort(sortBy)
+        .skip(skip)
+        .limit(limit)
+        .select(select)
+        .lean();
 
       return products;
       // Người dùng có vai trò admin

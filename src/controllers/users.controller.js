@@ -48,10 +48,24 @@ class UserController {
     }).send(res);
   }
 
+  static async createAddress(req, res, next) {
+    new SuccessResponse({
+      message: "update address user success",
+      metadata: await UserService.createAddress(req.body),
+    }).send(res);
+  }
+
   static async updateAddress(req, res, next) {
     new SuccessResponse({
       message: "update address user success",
       metadata: await UserService.updateAddress(req.body),
+    }).send(res);
+  }
+
+  static async deleteAddress(req, res, next) {
+    new SuccessResponse({
+      message: "update address user success",
+      metadata: await UserService.deleteAddress(req.body),
     }).send(res);
   }
 

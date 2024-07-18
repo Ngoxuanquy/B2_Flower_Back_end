@@ -3,12 +3,16 @@ const crypto = require("crypto");
 const { createTokenPair, verifyJWT } = require("../auth/authUtils");
 const shopModel = require("../models/shop.model");
 const emailModel = require("../models/email.model");
-
+const EmailVerifier = require("email-verifier");
 const KeyTokenService = require("./keyToken.service");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const { getInfoData } = require("../utils");
-const { BadRequestError, AuthFailureError, ForbiddenError } = require("../core/error.response");
+const {
+  BadRequestError,
+  AuthFailureError,
+  ForbiddenError,
+} = require("../core/error.response");
 const { findByEmail } = require("./shop.service");
 const randomstring = require("randomstring");
 const RoleShop = {
@@ -27,13 +31,18 @@ class AccessService {
       throw new ForbiddenError("Something wrong happend !! Pls relogin");
     }
 
-    if (keyStore.refreshToken !== refreshToken) throw new AuthFailureError("Shop not register 1");
+    if (keyStore.refreshToken !== refreshToken)
+      throw new AuthFailureError("Shop not register 1");
 
     const foundShop = await findByEmail({ email });
 
     if (!foundShop) throw new AuthFailureError("Shop not register 2");
 
-    const tokens = await createTokenPair({ userId: foundShop._id, email }, keyStore.publicKey, keyStore.privateKey);
+    const tokens = await createTokenPair(
+      { userId: foundShop._id, email },
+      keyStore.publicKey,
+      keyStore.privateKey
+    );
 
     await keyStore.update({
       $set: {
@@ -110,7 +119,11 @@ class AccessService {
         const privateKey = crypto.randomBytes(64).toString("hex");
         const publicKey = crypto.randomBytes(64).toString("hex");
 
-        const tokens = await createTokenPair({ userId: foundShop._id, email }, publicKey, privateKey);
+        const tokens = await createTokenPair(
+          { userId: foundShop._id, email },
+          publicKey,
+          privateKey
+        );
 
         await KeyTokenService.createKeyToken({
           userId: foundShop._id,
@@ -120,7 +133,10 @@ class AccessService {
         });
 
         return {
-          shop: getInfoData(["_id", "name", "email", "roles", "verify"], foundShop),
+          shop: getInfoData(
+            ["_id", "name", "email", "roles", "verify"],
+            foundShop
+          ),
           tokens,
           status: "Đăng Nhập Thành Công1",
         };
@@ -149,7 +165,11 @@ class AccessService {
         const privateKey = crypto.randomBytes(64).toString("hex");
         const publicKey = crypto.randomBytes(64).toString("hex");
 
-        const tokens = await createTokenPair({ userId: holderShop._id, email }, publicKey, privateKey);
+        const tokens = await createTokenPair(
+          { userId: holderShop._id, email },
+          publicKey,
+          privateKey
+        );
         await KeyTokenService.createKeyToken({
           userId: holderShop._id,
           refreshToken: tokens.refreshToken,
@@ -158,7 +178,10 @@ class AccessService {
         });
 
         return {
-          shop: getInfoData(["_id", "name", "email", "roles", "verify"], holderShop),
+          shop: getInfoData(
+            ["_id", "name", "email", "roles", "verify"],
+            holderShop
+          ),
           tokens,
           status: "Đăng Nhập Thành Công1",
         };
@@ -177,7 +200,11 @@ class AccessService {
         const privateKey = crypto.randomBytes(64).toString("hex");
         const publicKey = crypto.randomBytes(64).toString("hex");
 
-        const tokens = await createTokenPair({ userId: newShop.id }, publicKey, privateKey);
+        const tokens = await createTokenPair(
+          { userId: newShop.id },
+          publicKey,
+          privateKey
+        );
 
         const publicKeyString = await KeyTokenService.createKeyToken({
           userId: newShop._id,
@@ -261,10 +288,15 @@ class AccessService {
 
   static signUp = async ({ name, email, password }) => {
     try {
+      // Check if email already exists
       const holderShop = await shopModel.findOne({ email }).lean();
       if (holderShop) {
-        throw new BadRequestError("Gmail đã được đăng ký!!");
+        return {
+          msg: "Email đã được đăng ký!!",
+        };
       }
+
+      // If email does not exist, proceed with signup logic
       const verificationCode = randomstring.generate(6);
       const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -281,28 +313,69 @@ class AccessService {
         text: `Your verification code is: ${verificationCode}`,
       };
 
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-          throw new BadRequestError("Gmail không tồn tại!!");
-        } else {
-          emailModel.create({
-            email: email,
-            code: verificationCode,
-          });
-        }
-      });
+      // Send verification code via email
+      try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log("Email sent:", info);
 
-      return {
-        code: 200,
-        metadata: null,
-      };
+        // Save verification code to database
+        await emailModel.create({
+          email: email,
+          code: verificationCode,
+        });
+
+        return {
+          code: 200,
+          metadata: null,
+        };
+      } catch (error) {
+        console.error("Error sending email:", error);
+
+        return {
+          msg: "Email không tồn tại!!",
+        };
+      }
     } catch (error) {
+      console.error("Database error:", error);
+
       return {
         code: "xxx",
         msg: error.message,
         status: "error",
       };
+    }
+  };
+  static ResetPasswords = async ({ email, currentPassword, newPassword }) => {
+    try {
+      console.log("abcbcbcbc");
+      // Assuming findByEmail returns a Mongoose model instance
+      const foundShop = await shopModel.findOne({ email });
+
+      console.log("Found shop:", foundShop); // Debugging statement
+
+      if (!foundShop) {
+        throw new BadRequestError("Shop not registered");
+      }
+
+      const match = await bcrypt.compare(currentPassword, foundShop.password);
+
+      if (!match) {
+        return {
+          msg: "Sai mật khẩu",
+        };
+      }
+
+      foundShop.password = await bcrypt.hash(newPassword, 10); // Ensure bcrypt.hash() is awaited
+
+      await foundShop.save();
+
+      return {
+        msg: "Đổi mật khẩu thành công",
+      };
+    } catch (error) {
+      // Handle errors here, log or throw as needed
+      console.error("Error in ResetPassword:", error);
+      throw error; // Re-throw the error or handle as appropriate
     }
   };
 
@@ -378,7 +451,11 @@ class AccessService {
       if (newShop) {
         const privateKey = crypto.randomBytes(64).toString("hex");
         const publicKey = crypto.randomBytes(64).toString("hex");
-        const tokens = await createTokenPair({ userId: newShop.id }, publicKey, privateKey);
+        const tokens = await createTokenPair(
+          { userId: newShop.id },
+          publicKey,
+          privateKey
+        );
         const publicKeyString = await KeyTokenService.createKeyToken({
           userId: newShop._id,
           publicKey,

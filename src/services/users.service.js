@@ -51,12 +51,13 @@ class UserService {
 
   static async updateMoney({ userId, moneys }) {
     try {
+      console.log({ moneys });
       const user = await shopModel.findOne({ _id: userId });
 
       if (user) {
         const currentMoney = user.moneys || 0;
 
-        user.moneys = currentMoney + moneys;
+        user.moneys = currentMoney + Number(moneys);
         // console.log(userCart)
         return user.save();
       } else {

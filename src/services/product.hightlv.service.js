@@ -59,6 +59,7 @@ class ProductFactory {
           product_quantity: payload.product_quantity,
           product_thumb: payload.product_thumb,
           product_attributes: payload.product_attributes,
+          product_discount: payload.product_discount,
         });
 
         // Lưu sản phẩm đã cập nhật và chờ hoàn thành
@@ -159,6 +160,7 @@ class Product {
     product_type,
     product_shop,
     product_attributes,
+    product_discount,
   }) {
     this.product_name = product_name;
     this.product_thumb = product_thumb;
@@ -168,6 +170,7 @@ class Product {
     this.product_type = product_type;
     this.product_shop = product_shop;
     this.product_attributes = product_attributes;
+    this.product_discount = product_discount;
   }
 
   async createProduct(product_id) {

@@ -381,43 +381,48 @@ class AccessService {
 
   static forgotPassword = async ({ email }) => {
     try {
-      const holderShop = await shopModel.findOne({ email }); // Remove .lean() here
+      const holderShop = await shopModel.findOne({ email });
+      console.log(holderShop);
       if (!holderShop) {
-        throw new BadRequestError("Không tồn tại Gmail!!");
+        console.log("Email not registered");
+        return {
+          msg: "Gmail chưa được đăng ký!!",
+        };
       }
-      const verificationCode = randomstring.generate(6);
-      holderShop.password = await bcrypt.hash(verificationCode, 10); // Ensure bcrypt.hash() is awaited
+      console.log("Shop found");
 
-      await holderShop.save(); // Save the modified document
+      const verificationCode = randomstring.generate(6);
+      holderShop.password = await bcrypt.hash(verificationCode, 10);
+
+      await holderShop.save();
 
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "ngoxuanquy1812@gmail.com",
-          pass: "bgoz fvvx raus cqjo", // Consider using environment variables for sensitive information
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
         },
       });
 
       const mailOptions = {
-        from: "ngoxuanquy1812@gmail.com",
+        from: process.env.EMAIL_USER,
         to: email,
         subject: "Thay đổi mật khẩu",
         html: `<div>Mật khẩu mới của bạn là : <b> ${verificationCode}</b>
-        <div>
-        Vui lòng đừng quên nữa
-        </div>
-      </div>`,
+      <div>
+      Vui lòng đừng quên nữa
+      </div>
+    </div>`,
       };
 
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-          console.log(error);
-          throw new BadRequestError("Gmail không tồn tại!!");
+          console.error("Error sending email:", error);
+          return {
+            msg: "Gmail không tồn tại!!",
+          };
         } else {
-          // emailModel.create({
-          //   email: email,
-          //   code: verificationCode,
-          // });
+          console.log("Email sent:", info.response);
         }
       });
 
@@ -426,6 +431,7 @@ class AccessService {
         metadata: null,
       };
     } catch (error) {
+      console.error("Error in forgotPassword:", error);
       return {
         code: "xxx",
         msg: error.message,

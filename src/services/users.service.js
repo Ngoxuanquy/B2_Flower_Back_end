@@ -213,11 +213,11 @@ class UserService {
 
     console.log(admin);
 
-    if (admin && admin.roles && admin.roles.includes("ADMIN")) {
-      const userRoles = admin.roles;
-      console.log({ userRoles });
-
-      const products = shopModel
+    if (
+      (admin && admin.roles && admin.roles.includes("ADMIN")) ||
+      admin.roles.includes("DISCOUNT")
+    ) {
+      const user = shopModel
         .find(filter)
         .sort(sortBy)
         .skip(skip)
@@ -225,7 +225,7 @@ class UserService {
         .select(select)
         .lean();
 
-      return products;
+      return user;
       // Người dùng có vai trò admin
       // Thực hiện các hành động liên quan đến việc lấy danh sách người dùng của admin
     } else {

@@ -23,5 +23,6 @@ router.use("/v1/api/transaction", require("./transaction"));
 router.use("/v1/api/contact", require("./contacts"));
 router.use("/v1/api/users", require("./users"));
 router.use("/v1/api/vnpay", require("./VnPay"));
+router.use("/v1/api/brokenFlowers", require("./brokenFlowers"));
 
 module.exports = router;

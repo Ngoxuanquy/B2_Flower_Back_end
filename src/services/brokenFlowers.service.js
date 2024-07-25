@@ -67,21 +67,21 @@ class brokenFlowersService {
       // Update the status
       brokenFlower.status = payload.status;
       await brokenFlower.save();
-
+      console.log({ status: payload.status });
       // If status is "Không duyệt", update product quantity
       if (payload.status === "Đã duyệt") {
         // Find the product by ID
-        const product = await Product.findById(payload.productId);
-        if (!product) {
+        const newProduct = await product.findById(payload.productId);
+        if (!newProduct) {
           throw new Error("Product not found");
         }
 
         // Update the product quantity
-        product.product_quantity -= Number(payload.quantity);
+        newProduct.product_quantity -= Number(payload.quantity);
 
         console.log({ product_quantity: product.product_quantity });
 
-        await product.save();
+        await newProduct.save();
       }
     } catch (error) {
       console.error(error);
@@ -134,9 +134,6 @@ class brokenFlowersService {
   }
 
   static async getToBrokenFlowers({ status, status2 }) {
-    console.log({ status });
-    console.log({ status2 });
-
     return await brokenFlowers
       .find({
         $or: [{ status: status }, { status: status2 }],

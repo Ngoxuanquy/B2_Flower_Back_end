@@ -14,64 +14,24 @@ const { findAllProducts } = require("../models/repositories/product.repo");
 
 class DiscountService {
   static async createDiscountCode(payload) {
-    const {
-      code,
-      start_date,
-      end_date,
-      is_active,
-      shopId,
-      min_order_value,
-      product_ids,
-      applies_to,
-      name,
-      description,
-      type,
-      value,
-      max_value,
-      max_uses,
-      max_uses_per_user,
-      uses_count,
-      users_user,
-    } = payload;
-
-    if (new Date() > new Date(start_date) || new Date() > new Date(end_date)) {
-      throw new BadRequestError("Discount code has expried!");
+    if (
+      new Date() > new Date(payload.start_date) ||
+      new Date() > new Date(payload.end_date)
+    ) {
+      throw new BadRequestError("Mã giảm giá đã hết hạn!");
     }
 
-    if (new Date(start_date) >= new Date(end_date)) {
-      throw new BadRequestError("Start date must be before end date");
-    }
-
-    const foundDiscount = await checkDiscountExists({
-      model: discountModel,
-      filter: {
-        discount_code: code,
-        discount_shopId: convertToObjectIdMongodb(shopId),
-      },
-    });
-
-    if (foundDiscount && foundDiscount.discount_is_active) {
-      throw new BadRequestError("Discount exists!");
+    if (new Date(payload.start_date) >= new Date(payload.end_date)) {
+      throw new BadRequestError("Ngày bắt đầu phải lơn hơn ngày kết thúc");
     }
 
     const newDiscount = discountModel.create({
-      discount_name: name,
-      discount_description: description,
-      discount_type: type,
-      discount_value: value,
-      discount_code: code,
-      discount_start_date: new Date(start_date),
-      discount_end_date: new Date(end_date),
-      discount_max_uses: max_uses,
-      discount_uses_count: uses_count,
-      discount_users_used: users_user,
-      discount_user_per_used: max_uses_per_user,
-      discount_min_order_value: min_order_value || 0,
-      discount_max_value: max_value,
-      discount_shopId: shopId,
-      discount_is_active: is_active,
-      discount_applies_to: applies_to,
-      discount_product_ids: applies_to === "all" ? [] : product_ids,
+      discount_name: payload.name,
+      discount_value: payload.value,
+      discount_code: payload.code,
+      discount_start_date: new Date(payload.start_date),
+      discount_end_date: new Date(payload.end_date),
+      discount_users_used: payload.users_user,
     });
 
     return newDiscount;
@@ -153,6 +113,48 @@ class DiscountService {
     return discounts;
   }
 
+  static async updateNotification({ email }) {
+    const discounts = await discountModel.find({
+      discount_users_used: { $in: [email] },
+    });
+
+    console.log("Original Discounts:", discounts);
+
+    // Filter out discounts where email is already in discount_user_notification_used
+    const filteredDiscounts = discounts.filter(
+      (discount) => !discount.discount_user_notification_used.includes(email)
+    );
+
+    console.log("Filtered Discounts:", filteredDiscounts);
+
+    return filteredDiscounts;
+  }
+
+  static async addUpdateNotification({ email }) {
+    // Find all discounts where the email has been used
+    const discounts = await discountModel.find({
+      discount_users_used: { $in: [email] },
+    });
+
+    console.log("Original Discounts:", discounts);
+
+    // Update each discount to add the email to the discount_user_notification_used array
+    const updatedDiscounts = discounts.map((discount) => {
+      if (!discount.discount_user_notification_used.includes(email)) {
+        discount.discount_user_notification_used.push(email);
+      }
+      return discount.save(); // Save the updated discount
+    });
+
+    // Wait for all updates to complete
+    await Promise.all(updatedDiscounts);
+
+    // Fetch the updated discounts to return
+    return {
+      mes: "done",
+    };
+  }
+
   static async getDiscountAmount({ codeId, userId, shopId, products }) {
     const foundDiscount = await checkDiscountExists({
       model: discountModel,
@@ -229,6 +231,36 @@ class DiscountService {
     });
 
     return deleted;
+  }
+
+  static async deleteUserToDiscount({ codeId, email }) {
+    try {
+      // Tìm phần tử bằng codeId
+      const deleted = await discountModel.findById(codeId);
+
+      // Kiểm tra nếu phần tử không tồn tại
+      if (!deleted) {
+        throw new Error("Code not found");
+      }
+
+      // Kiểm tra nếu discount_users_used tồn tại và là một mảng
+      if (!Array.isArray(deleted.discount_users_used)) {
+        throw new Error("discount_users_used is not an array");
+      }
+      // Xóa email từ mảng discount_users_used
+      deleted.discount_users_used = deleted.discount_users_used.filter(
+        (userEmail) => userEmail !== email
+      );
+
+      // Lưu đối tượng deleted lại vào cơ sở dữ liệu
+      await deleted.save();
+
+      return deleted;
+    } catch (error) {
+      // Xử lý lỗi nếu có
+      console.error(error);
+      throw new Error("Error deleting user from discount");
+    }
   }
 
   static async cancleDiscountCode({ codeId, shopId, userId }) {

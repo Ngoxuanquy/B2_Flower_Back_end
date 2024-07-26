@@ -57,9 +57,9 @@ var discountSchema = new Schema(
       default: [],
     },
     // số lượng mã giảm giá mỗi người có thể sử dụng
-    discount_user_per_used: {
-      type: Number,
-      // required: true,
+    discount_user_notification_used: {
+      type: Array,
+      default: [],
     },
     // giá trị tối thiểu cho mỗi đơn hàng
     discount_min_order_value: {

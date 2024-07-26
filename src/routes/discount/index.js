@@ -21,6 +21,21 @@ router.get(
 );
 
 router.post("/", asyncHandler(DiscountController.createDiscount));
+router.post(
+  "/deleteUserToDiscount",
+  asyncHandler(DiscountController.deleteUserToDiscount)
+);
+
+router.post(
+  "/updateNotification",
+  asyncHandler(DiscountController.updateNotification)
+);
+
+router.post(
+  "/addUpdateNotification",
+  asyncHandler(DiscountController.addUpdateNotification)
+);
+
 router.patch(
   "/:discountId",
   asyncHandler(DiscountController.updateDiscountCode)

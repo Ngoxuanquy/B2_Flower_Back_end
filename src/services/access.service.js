@@ -399,8 +399,8 @@ class AccessService {
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
+          user: "ngoxuanquy1812@gmail.com",
+          pass: "bgoz fvvx raus cqjo", // Consider using environment variables for sensitive information
         },
       });
 

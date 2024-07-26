@@ -5,7 +5,28 @@ class DiscountController {
   static createDiscount = async (req, res, next) => {
     new SuccessResponse({
       message: "Create new discount success",
-      metadata: await DiscountService.createDiscountCode({ ...req.body }),
+      metadata: await DiscountService.createDiscountCode(req.body),
+    }).send(res);
+  };
+
+  static deleteUserToDiscount = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Create new discount success",
+      metadata: await DiscountService.deleteUserToDiscount(req.body),
+    }).send(res);
+  };
+
+  static updateNotification = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Create new discount success",
+      metadata: await DiscountService.updateNotification(req.body),
+    }).send(res);
+  };
+
+  static addUpdateNotification = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Create new discount success",
+      metadata: await DiscountService.addUpdateNotification(req.body),
     }).send(res);
   };
 

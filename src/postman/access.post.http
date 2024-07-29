@@ -33,6 +33,8 @@ x-client-id: 6543bd8ae5184627a486ea7f
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTQzYmQ4YWU1MTg0NjI3YTQ4NmVhN2YiLCJlbWFpbCI6IjEyMSIsImlhdCI6MTcxNjgwMjE3NCwiZXhwIjoxNzE2OTc0OTc0fQ.9TbPiL3rIEFXQrEhWUZfp9RJwSM5M8Bp88RqB7N0uoM
 
 
+
+
 ###
 post {{url_dev}}/cart/getlistCart
 Content-Type: application/json
@@ -84,9 +86,27 @@ Content-Type: application/json
 x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
 
 {
-    "email": "1",
-    "password": "1"
+    "email": "123",
+    "password": "123"
 }
+
+###
+post {{url_dev}}/product/byId/654206e2f5dd24808ce26cf6
+Content-Type: application/json
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
+
+
+###
+post {{url_dev}}/discount/updateNotification
+Content-Type: application/json
+x-api-key: 9c5fc232e6d39008a1757e4e97b576df03b1aac46dbf558344477b3f346bad379a831a6d8f567aed43c67dce6402f0ede2c72dda596c38553a78ae73cddffdae
+x-client-id: 6650505487307087c20a459a
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjUwNTA1NDg3MzA3MDg3YzIwYTQ1OWEiLCJlbWFpbCI6IjEyMyIsImlhdCI6MTcyMTk2MzU5NiwiZXhwIjoxNzIyMTM2Mzk2fQ.qZWKaHtScsoka9eFKwhNSmbHD8muiBzpfkRpSYbTiuo
+
+{
+    "email" : "123"
+}
+
 
 ###
 get {{url_dev}}/cart/getlist

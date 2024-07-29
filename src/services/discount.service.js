@@ -14,10 +14,7 @@ const { findAllProducts } = require("../models/repositories/product.repo");
 
 class DiscountService {
   static async createDiscountCode(payload) {
-    if (
-      new Date() > new Date(payload.start_date) ||
-      new Date() > new Date(payload.end_date)
-    ) {
+    if (new Date() > new Date(payload.end_date)) {
       throw new BadRequestError("Mã giảm giá đã hết hạn!");
     }
 

@@ -193,7 +193,7 @@ class UserService {
   }
 
   static async getListUser({ userId }) {
-    const limit = 10;
+    const limit = 30;
     const sort = "ctime";
     const page = 1;
     const filter = {

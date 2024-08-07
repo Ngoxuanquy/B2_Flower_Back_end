@@ -117,13 +117,15 @@ class TransactionService {
     return deleteCart;
   }
 
-  static async updateStatus({ transactionId, status }) {
+  static async updateStatus({ transactionId, status, notifications }) {
+    console.log({ notifications });
     const query = {
         _id: transactionId,
       },
       updateSet = {
         $set: {
           status: status,
+          notifications: notifications ? notifications : null,
         },
       };
 

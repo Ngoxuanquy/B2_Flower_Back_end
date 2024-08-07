@@ -45,11 +45,26 @@ class TransactionController {
     }).send(res);
   }
 
+  static async getFullOrderReceived(req, res, next) {
+    new SuccessResponse({
+      message: "deleted Cart success",
+      metadata: await TransactionService.getFullOrderReceived(),
+    }).send(res);
+  }
+
   static async getFullOrder_doneUseId(req, res, next) {
     console.log("getFullOrder_done");
     new SuccessResponse({
       message: "deleted Cart success",
       metadata: await TransactionService.getFullOrder_doneUseId(req.params),
+    }).send(res);
+  }
+
+  static async getFullOrder_receivedUseId(req, res, next) {
+    console.log("getFullOrder_done");
+    new SuccessResponse({
+      message: "deleted Cart success",
+      metadata: await TransactionService.getFullOrder_receivedUseId(req.params),
     }).send(res);
   }
 
@@ -63,7 +78,7 @@ class TransactionController {
   static async updateStatus(req, res, next) {
     new SuccessResponse({
       message: "update Cart success",
-      metadata: await TransactionService.updateStatus(req.params),
+      metadata: await TransactionService.updateStatus(req.body),
     }).send(res);
   }
 

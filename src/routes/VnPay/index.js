@@ -17,6 +17,8 @@ const ORDERS = {
   email: null,
   MaDonHang: null,
   paymentLinkCreated: false, // Flag to track if payment link was created
+  discount: 0,
+  phiShip: 0,
 };
 
 const DONNET = {
@@ -41,6 +43,9 @@ router.post("/create-payment-link", async (req, res) => {
   ORDERS.user = req.body?.user;
   ORDERS.email = req.body?.email;
   ORDERS.MaDonHang = req.body?.MaDonHang;
+  ORDERS.discount = req.body.discount;
+  ORDERS.phiShip = req.body.phiShip;
+
   ORDERS.paymentLinkCreated = true; // Set the flag when payment link is created
 
   const convertedProducts = req.body?.product.map((product) => ({
@@ -102,10 +107,6 @@ router.get("/statusDonet", async (req, res) => {
     }
     const order = await PayOS.getPaymentLinkInformation(DONNET.MaDonHang);
 
-    console.log({ order });
-    console.log({ MaDonHang: DONNET.MaDonHang });
-    console.log({ moneys: DONNET.moneys });
-
     if (!order) {
       return res.json({
         error: -1,
@@ -166,6 +167,8 @@ router.get("/abc/:orderId", async (req, res) => {
         transaction_userId: ORDERS?.user,
         notifications: "Đã thanh toán",
         total_amounts: ORDERS?.price,
+        discount: ORDERS.discount,
+        phiShip: ORDERS.phiShip,
       });
 
       try {
@@ -180,9 +183,6 @@ router.get("/abc/:orderId", async (req, res) => {
         // Convert old and new data to JSON strings for comparison
         const oldCartJSON = JSON.stringify(oldCart.cart_products);
         const newCartDataJSON = JSON.stringify(ORDERS?.products);
-
-        console.log({ oldCartJSON });
-        console.log(newCartDataJSON);
 
         if (oldCart.cart_products.length === ORDERS?.products.length) {
           // If the data is equal, delete the cart

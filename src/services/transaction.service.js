@@ -3,6 +3,18 @@ const { transaction } = require("../models/transaction.model");
 // const { getProductById } = require('../models/repositories/product.repo')
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
+
+function generateRandomId(length = 6) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
 class TransactionService {
   // START REPO CART
   // tạo giỏ hàng
@@ -31,16 +43,20 @@ class TransactionService {
     phiShip,
     email,
     total_amounts,
+    discount,
   }) {
     const newTransaction = new transaction({
       transaction_state: "active",
       userId: user._id,
+      transactionId: generateRandomId(),
       // transaction_ShopId: shopId,
+      discount: discount,
       transaction_products: product,
       payment_expression: paymentExpression,
       transaction_userId: [user],
       notifications: notifications || "null",
       total_amounts: total_amounts,
+      phiShip: phiShip,
     });
 
     try {

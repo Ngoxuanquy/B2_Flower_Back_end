@@ -14,6 +14,9 @@ const TransactionSchema = new Schema(
     notifications: {
       type: String,
     },
+    transactionId: {
+      type: String,
+    },
     userId: {
       type: String,
     },
@@ -40,6 +43,12 @@ const TransactionSchema = new Schema(
       type: String,
     },
     total_amounts: {
+      type: Number,
+    },
+    discount: {
+      type: Number,
+    },
+    phiShip: {
       type: Number,
     },
   },

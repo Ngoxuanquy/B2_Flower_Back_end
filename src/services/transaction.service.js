@@ -22,16 +22,7 @@ class TransactionService {
   //     return await transaction.create(query, updateOrInsert, options)
   // }
 
-  static async createUserTransaction({
-    user,
-    product,
-    shopId,
-    paymentExpression,
-    notifications,
-    phiShip,
-    email,
-    total_amounts,
-  }) {
+  static async createUserTransaction({ user, product, shopId, paymentExpression, notifications, phiShip, email, total_amounts }) {
     const newTransaction = new transaction({
       transaction_state: "active",
       userId: user._id,
@@ -75,12 +66,7 @@ class TransactionService {
     </tbody>
   </table>
   <p>Phí Ship: ${phiShip} </p>
-    <p>Tổng thanh toán: ${
-      product.reduce(
-        (total, item) => total + item.quantity * item.product_price,
-        0
-      ) + phiShip
-    }</p>
+    <p>Tổng thanh toán: ${product.reduce((total, item) => total + item.quantity * item.product_price, 0) + phiShip}</p>
   <p>Vui lòng xác nhận đơn hàng của bạn.</p>
 `;
 
@@ -131,13 +117,13 @@ class TransactionService {
     return deleteCart;
   }
 
-  static async updateStatus({ transactionId }) {
+  static async updateStatus({ transactionId, status }) {
     const query = {
         _id: transactionId,
       },
       updateSet = {
         $set: {
-          status: "Đã gửi hàng",
+          status: status,
         },
       };
 
@@ -244,12 +230,30 @@ class TransactionService {
     }
   }
 
-  static async deleteTransaction({ transactionId }) {
+  static async getFullOrder_receivedUseId({ userId }) {
+    console.log(userId);
     try {
       // Use the 'findMany' method to find multiple documents where 'userId' matches
       const transactions = await transaction
-        .deleteOne({ _id: transactionId })
+        .find({
+          status: "Đã nhận hàng",
+          userId: userId,
+        })
         .lean();
+
+      // Return an array of matching documents
+      return transactions;
+    } catch (error) {
+      // Handle any errors (e.g., database connection error)
+      console.error("Error fetching user transactions:", error);
+      throw error;
+    }
+  }
+
+  static async deleteTransaction({ transactionId }) {
+    try {
+      // Use the 'findMany' method to find multiple documents where 'userId' matches
+      const transactions = await transaction.deleteOne({ _id: transactionId }).lean();
 
       // Return an array of matching documents
       return {

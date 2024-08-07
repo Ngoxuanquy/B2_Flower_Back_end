@@ -45,6 +45,13 @@ class TransactionController {
     }).send(res);
   }
 
+  static async getFullOrderReceived(req, res, next) {
+    new SuccessResponse({
+      message: "deleted Cart success",
+      metadata: await TransactionService.getFullOrderReceived(),
+    }).send(res);
+  }
+
   static async getFullOrder_doneUseId(req, res, next) {
     console.log("getFullOrder_done");
     new SuccessResponse({

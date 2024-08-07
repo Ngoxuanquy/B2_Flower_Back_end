@@ -208,6 +208,24 @@ class TransactionService {
     }
   }
 
+  static async getFullOrderReceived() {
+    try {
+      // Use the 'findMany' method to find multiple documents where 'userId' matches
+      const transactions = await transaction
+        .find({
+          status: "Đã nhận hàng",
+        })
+        .lean();
+
+      // Return an array of matching documents
+      return transactions;
+    } catch (error) {
+      // Handle any errors (e.g., database connection error)
+      console.error("Error fetching user transactions:", error);
+      throw error;
+    }
+  }
+
   static async getFullOrder_doneUseId({ userId }) {
     console.log(userId);
     try {

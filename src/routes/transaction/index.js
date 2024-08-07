@@ -17,6 +17,8 @@ router.post("/getTransaction/:userId", asyncHandler(TransactionController.listTo
 router.post("/updateStatus", asyncHandler(TransactionController.updateStatus));
 router.get("/getFull", asyncHandler(TransactionController.getFull));
 router.get("/getFullOrder_done", asyncHandler(TransactionController.getFullOrder_done));
+router.get("/getFullOrderReceived", asyncHandler(TransactionController.getFullOrderReceived));
+
 router.get("/getFullUseId/:userId", asyncHandler(TransactionController.getFullUseId));
 router.get("/getFullOrder_doneUseId/:userId", asyncHandler(TransactionController.getFullOrder_doneUseId));
 router.get("/getFullOrder_receivedUseId/:userId", asyncHandler(TransactionController.getFullOrder_receivedUseId));

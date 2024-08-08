@@ -9,6 +9,15 @@ const session = require("express-session");
 const PayOS = require("../../utils/payos");
 const shopModel = require("../../models/shop.model");
 
+function generateRandomString(length = 6) {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 const ORDERS = {
   products: [],
   userId: null,
@@ -162,6 +171,7 @@ router.get("/abc/:orderId", async (req, res) => {
       const newTransaction = new transaction({
         transaction_state: "active",
         userId: ORDERS?.userId,
+        transactionId: generateRandomString(),
         transaction_products: ORDERS?.products,
         payment_expression: ORDERS?.price,
         transaction_userId: ORDERS?.user,
@@ -191,18 +201,13 @@ router.get("/abc/:orderId", async (req, res) => {
         } else {
           // Compare old and new data to find new items in newCartData
           ORDERS?.products?.forEach((newItem) => {
-            oldCart.cart_products = oldCart.cart_products?.filter(
-              (product) => newItem._id !== product._id
-            );
+            oldCart.cart_products = oldCart.cart_products?.filter((product) => newItem._id !== product._id);
           });
 
           console.log({ test: oldCart.cart_products });
 
           // Update the cart with the filtered cart_products
-          await cart.updateOne(
-            { cart_userId: ORDERS.userId },
-            { $set: { cart_products: oldCart.cart_products } }
-          );
+          await cart.updateOne({ cart_userId: ORDERS.userId }, { $set: { cart_products: oldCart.cart_products } });
         }
 
         const htmlContent = `

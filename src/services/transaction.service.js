@@ -137,17 +137,24 @@ class TransactionService {
 
   static async updateStatus({ transactionId, status, notifications }) {
     console.log({ notifications });
-    const query = {
-        _id: transactionId,
+
+    // Define the query to find the document
+    const query = { _id: transactionId };
+
+    // Define the update set based on the status
+    const updateSet = {
+      $set: {
+        status: status,
       },
-      updateSet = {
-        $set: {
-          status: status,
-          notifications: notifications ? notifications : null,
-        },
-      };
+    };
+
+    // Update notifications only if status is "đã gửi hàng"
+    if (status === "đã gửi hàng") {
+      updateSet.$set.notifications = notifications ? notifications : null;
+    }
 
     try {
+      // Perform the update operation
       const updateResult = await transaction.updateOne(query, updateSet);
       console.log(`${updateResult.modifiedCount} bản ghi đã được cập nhật.`);
       return updateResult;

@@ -10,7 +10,8 @@ const PayOS = require("../../utils/payos");
 const shopModel = require("../../models/shop.model");
 
 function generateRandomString(length = 6) {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
   const charactersLength = characters.length;
   for (let i = 0; i < length; i++) {
@@ -166,7 +167,7 @@ router.get("/abc/:orderId", async (req, res) => {
         data: null,
       });
     }
-    console.log({ order: ORDERS });
+    console.log({ order12: ORDERS });
     if (order?.status === "PAID" && ORDERS.userId !== null) {
       const newTransaction = new transaction({
         transaction_state: "active",
@@ -183,32 +184,6 @@ router.get("/abc/:orderId", async (req, res) => {
 
       try {
         const createdTransaction = await newTransaction.save();
-
-        const oldCart = await cart.findOne({ cart_userId: ORDERS?.userId });
-
-        if (!oldCart) {
-          throw new Error("Cart not found.");
-        }
-
-        // Convert old and new data to JSON strings for comparison
-        const oldCartJSON = JSON.stringify(oldCart.cart_products);
-        const newCartDataJSON = JSON.stringify(ORDERS?.products);
-
-        if (oldCart.cart_products.length === ORDERS?.products.length) {
-          // If the data is equal, delete the cart
-          await cart.deleteOne({ cart_userId: ORDERS?.userId });
-          return null; // Indicate that the cart has been deleted
-        } else {
-          // Compare old and new data to find new items in newCartData
-          ORDERS?.products?.forEach((newItem) => {
-            oldCart.cart_products = oldCart.cart_products?.filter((product) => newItem._id !== product._id);
-          });
-
-          console.log({ test: oldCart.cart_products });
-
-          // Update the cart with the filtered cart_products
-          await cart.updateOne({ cart_userId: ORDERS.userId }, { $set: { cart_products: oldCart.cart_products } });
-        }
 
         const htmlContent = `
       <h2>Đơn hàng đã đặt</h2>
@@ -264,6 +239,35 @@ router.get("/abc/:orderId", async (req, res) => {
             ORDERS.userId = null;
           }
         });
+
+        const oldCart = await cart.findOne({ cart_userId: ORDERS?.userId });
+
+        if (!oldCart) {
+          throw new Error("Cart not found.");
+        }
+
+        // Convert old and new data to JSON strings for comparison
+
+        if (oldCart.cart_products.length === ORDERS?.products.length) {
+          // If the data is equal, delete the cart
+          await cart.deleteOne({ cart_userId: ORDERS?.userId });
+          return;
+        } else {
+          // Compare old and new data to find new items in newCartData
+          ORDERS?.products?.forEach((newItem) => {
+            oldCart.cart_products = oldCart.cart_products?.filter(
+              (product) => newItem._id !== product._id
+            );
+          });
+
+          console.log({ test: oldCart.cart_products });
+
+          // Update the cart with the filtered cart_products
+          await cart.updateOne(
+            { cart_userId: ORDERS.userId },
+            { $set: { cart_products: oldCart.cart_products } }
+          );
+        }
 
         return createdTransaction;
       } catch (error) {

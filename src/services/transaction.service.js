@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 
 function generateRandomString(length = 6) {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
   const charactersLength = characters.length;
   for (let i = 0; i < length; i++) {
@@ -32,7 +33,17 @@ class TransactionService {
   //     return await transaction.create(query, updateOrInsert, options)
   // }
 
-  static async createUserTransaction({ user, product, shopId, paymentExpression, notifications, phiShip, email, total_amounts, discount }) {
+  static async createUserTransaction({
+    user,
+    product,
+    shopId,
+    paymentExpression,
+    notifications,
+    phiShip,
+    email,
+    total_amounts,
+    discount,
+  }) {
     const newTransaction = new transaction({
       transaction_state: "active",
       userId: user._id,
@@ -72,9 +83,13 @@ class TransactionService {
            <div>
            ${item.product_name}</div>
           </td>
-          <td style="border: 1px solid black; padding: 8px;">${item.quantity}</td>
           <td style="border: 1px solid black; padding: 8px;">${
-            item.product_discount == 0 ? item.product_price : item.product_price * (1 - item.product_discount / 100)
+            item.quantity
+          }</td>
+          <td style="border: 1px solid black; padding: 8px;">${
+            item.product_discount == 0
+              ? item.product_price
+              : item.product_price * (1 - item.product_discount / 100)
           } đ</td>
         </tr>
       `
@@ -82,7 +97,9 @@ class TransactionService {
         .join("")}
     </tbody>
   </table>
-  <p>Trạng thái: ${notifications}</p>
+  <p>Trạng thái: ${
+    notifications == undefined ? "chưa thanh toán" : notifications
+  }</p>
   <p>Phí Ship: ${phiShip} đ</p>
     <p>Tổng thanh toán: ${total_amounts} đ</p>
   <p>Vui lòng xác nhận đơn hàng của bạn.</p>
@@ -149,7 +166,7 @@ class TransactionService {
     };
 
     // Update notifications only if status is "đã gửi hàng"
-    if (status === "đã gửi hàng") {
+    if (status === "Đã nhận hàng") {
       updateSet.$set.notifications = notifications ? notifications : null;
     }
 
@@ -298,7 +315,9 @@ class TransactionService {
   static async deleteTransaction({ transactionId }) {
     try {
       // Use the 'findMany' method to find multiple documents where 'userId' matches
-      const transactions = await transaction.deleteOne({ _id: transactionId }).lean();
+      const transactions = await transaction
+        .deleteOne({ _id: transactionId })
+        .lean();
 
       // Return an array of matching documents
       return {
